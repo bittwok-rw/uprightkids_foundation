@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                String    @unique @default(uuid())
+  name              String
+  email             String    @unique
+  password          String
+  isActive          Boolean   @default(true)
+  isPasswordChanged Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  Blog              Blog[]
+  Project           Project[]
+}
+
+model Blog {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  tags      String[]
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    Users     @relation(fields: [userId], references: [id])
+  Gallery Gallery[]
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  name      String
+  content   String
+  image     String? // URL of the image
+  tags      String[]
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    Users     @relation(fields: [userId], references: [id])
+  Gallery Gallery[]
+}
+
+enum GalleryCategory {
+  BLOG
+  PROJECT
+  TEAM
+}
+
+model Gallery {
+  id        String          @id @default(uuid())
+  blogId    String?
+  url       String
+  projectId String?
+  category  GalleryCategory @default(BLOG)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  project Project? @relation(fields: [projectId], references: [id])
+  blog    Blog?    @relation(fields: [blogId], references: [id])
+}
