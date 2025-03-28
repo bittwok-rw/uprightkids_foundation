@@ -8,48 +8,32 @@ import Projects from "@/components/projects";
 import { SupportSection } from "./joinus";
 
 const WhatWeDo = () => {
-  const LinkCare = [
-    "Education: We ensure that children have everything they need for academic success, from school supplies to tuition assistance, along with mentorship to guide their learning journey.",
-    `Socioeconomic Empowerment (Vocational Training): By offering practical skills such as sewing, we empower young girls to gain independence and build their own financial security.`,
-    `Health and Nutrition: We prioritize access to healthcare and nourishing food, keeping children strong and healthy so they can thrive.`,
-    `Psychosocial Support: Through trauma-informed care and counseling, we help children process past experiences and develop the emotional resilience they need for the future.`,
-    `Family Reintegration: We assist in reconnecting children with their families, offering support and counseling to foster stronger relationships and create a stable, nurturing home environment.`,
-  ];
+
   return (
-    <div className="flex flex-col items-center w-full overflow-x-hidden">
-    {/* Section 1: Comprehensive Care Model */}
-    <div className="grid grid-cols-1 md:grid-cols-2 p-4 md:p-0 gap-8 md:gap-16 w-full md:w-[80%]">
-      <div className="flex text-black items-center">
-        <div className="flex xl:flex-row flex-col text-black gap-3 w-full">
-          <div className="w-16 h-1 bg-black mb-4" />
-          <div className="flex flex-col flex-1">
-            <p>What we do</p>
-            <h2 className="font-bold text-xl md:text-2xl">Our Comprehensive Care Model</h2>
-              <p className="mt-4 text-gray-600">
-                We believe in nurturing every aspect of a child’s growth,
-                helping them reach their fullest potential. Our approach is
-                designed to support children in multiple key areas of life:
-              </p>
-              <div className="flex flex-col space-y-8">
-                {LinkCare.map((item, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="bg-primary rounded-full w-6 h-6 mt-1 flex items-center justify-center">
-                      <span className="text-white">✓</span>
-                    </div>
-                    <div className="flex flex-1 flex-col">
-                      <p className="text-black">
-                        <strong>{item.split(":")[0]}:</strong>
-                        {item.split(":").length > 1 && (
-                          <span className="ml-1">{item.split(":")[1]}</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+<div className="flex flex-col items-center w-full px-6 md:px-0">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full md:w-[80%]">
+    <div className="flex text-black items-center">
+      <div className="flex flex-col w-full">
+        {/* Inline black line and "WHAT WE DO" */}
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-12 h-[2px] bg-black" />
+          <p className="uppercase font-semibold text-sm tracking-wide text-gray-800">
+            What we do
+          </p>
         </div>
+
+        {/* Adjusted spacing for heading */}
+        <h2 className="font-bold text-3xl md:text-4xl mt-3 md:mt-4 leading-tight">
+          Our Comprehensive Care Model
+        </h2>
+
+        {/* Adjusted spacing for paragraph */}
+        <p className="mt-3 md:mt-4 text-gray-800 leading-relaxed">
+          We believe in nurturing every aspect of a child’s growth,
+          helping them reach their fullest potential.
+        </p>
+      </div>
+    </div>
         <div className="relative h-[30vh] md:min-h-[50vh]">
           <Image
             src="/images/whatwedo.png"

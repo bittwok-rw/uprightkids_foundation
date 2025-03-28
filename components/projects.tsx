@@ -1,7 +1,12 @@
 import { projectData } from "@/utils/projectData";
-import React from "react";
+import React, { useState } from "react";
 
 const Projects = () => {
+  const [showAll, setShowAll] = useState(false);
+  
+  // Determine which projects to display
+  const displayedProjects = showAll ? projectData : projectData.slice(0, 3);
+
   return (
     <section className="bg-gray-100 flex justify-center py-12">
       <div className="w-[80%] px-6">
@@ -17,7 +22,7 @@ const Projects = () => {
 
         {/* Project Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projectData.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <div
               key={index}
               className="relative bg-black min-h-[40vh] text-white p-4 rounded-lg overflow-hidden shadow-lg"
@@ -59,6 +64,18 @@ const Projects = () => {
             </div>
           ))}
         </div>
+
+        {/* Show More/Less Button */}
+        {projectData.length > 3 && (
+          <div className="text-center mt-8">
+            <button
+              onClick={() => setShowAll(!showAll)}
+              className=" bg-primary-900 text-white px-6 py-3 rounded-md font-bold hover:bg-primary-800 transition"
+            >
+              {showAll ? "Show Less" : "Show All Projects"}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

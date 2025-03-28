@@ -14,12 +14,16 @@ const Footer = () => {
 
   const whatWeDoLinks = [
     { text: "Why we do this", href: "/why-we-do-this" },
+    { text: "Conflict", href: "/why-we-do-this#conflict" },
     { text: "Supporters & Partners", href: "/why-we-do-this#partners" },
+    { text: "Blog", href: "/media" },
+    
   ];
 
   const joinUsLinks = [
     { text: "Donate", href: "/donation#donate" },
     { text: "Partner with us", href: "/joinus#partner" },
+    { text: "Fundraise with us", href: "/donation#donate" },
     { text: "Get involved", href: "/joinus" },
   ];
 

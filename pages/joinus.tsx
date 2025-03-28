@@ -292,16 +292,29 @@ const UprightKidsFoundation = () => {
           <div className="grid md:grid-cols-2 w-[80%] gap-16 place-content-center">
             <div className="font-bold  rounded justify-between items-center capitalize text-primary text-lg">
               <div className="flex items-start py-4">
-                <div className="w-[72px] mr-2  my-2 border-t-2 border-white">
+                <div className=" mr-2  my-2 border-t-2 border-white">
                   {""}
                 </div>
                 <div className="flex flex-col gap-8">
-                  <h2 className="text-white font-bold">Join Us</h2>
-                  <div className="my-4 text-white flex flex-col gap-8">
-                    <p className=" text-white ">
-                    Upright Kids Foundation is reaching out to the global community to support its important projects and help transform the lives of vulnerable children in the Democratic Republic of Congo. Together, we can make a real difference. Here are some ways you can get involved
-                    </p>
-                  </div>
+                <div className="flex items-center gap-4">
+  {/* Logo on the left */}
+  <div className="w-16 h-16"> {/* Adjust width and height as needed */}
+    <img 
+      src="/images/Join_us.png.png" // Replace with your actual logo path
+      alt="Upright Kids Foundation Logo"
+      className="w-full h-full object-contain"
+    />
+  </div>
+  
+  {/* "Join Us" heading on the right */}
+  <h2 className="text-white font-bold">Join Us</h2>
+</div>
+
+<div className="my-4 text-white flex flex-col gap-8">
+  <p className="text-white">
+    Upright Kids Foundation is reaching out to the global community to support its important projects and help transform the lives of vulnerable children in the Democratic Republic of Congo. Together, we can make a real difference. Here are some ways you can get involved
+  </p>
+</div>
                   <div>
 					<Link
 						href="/joinus#partner"
