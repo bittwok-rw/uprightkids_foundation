@@ -94,7 +94,7 @@ export default function AddProjectPage() {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
   
     try {
-      const response = await fetch(`http://localhost:5000/api/projects/${slug}`, {
+      const response = await fetch(`https://backenduprightkid.vercel.app/api/projects/${slug}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });

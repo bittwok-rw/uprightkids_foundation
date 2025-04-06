@@ -115,7 +115,7 @@ export default function AddTeamMemberPage() {
     if (!confirm("Are you sure you want to delete this member?")) return;
   
     try {
-      const response = await axios.delete(`http://localhost:5000/api/team/${id}`, {
+      const response = await axios.delete(`https://backenduprightkid.vercel.app/api/team/${id}`, {
         headers: { "Content-Type": "application/json" },
       });
     

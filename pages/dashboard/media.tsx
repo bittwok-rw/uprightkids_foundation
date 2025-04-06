@@ -63,7 +63,7 @@ const UploadBlog = () => {
 
   const fetchMediaPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/media");
+      const response = await axios.get("https://backenduprightkid.vercel.app/api/media");
       setMediaPosts(response.data);
     } catch (error) {
       console.error("Error fetching media posts:", error);
@@ -96,7 +96,7 @@ const UploadBlog = () => {
     setIsLoading(true);
 
     try {
-      await axios.post("http://localhost:5000/api/media", form);
+      await axios.post("https://backenduprightkid.vercel.app/api/media", form);
       alert("Media post uploaded successfully!");
       setForm({ title: "", slug: "", date: "", image: "", description: "" });
       fetchMediaPosts();
@@ -113,7 +113,7 @@ const UploadBlog = () => {
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this post?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/media/${id}`);
+      await axios.delete(`https://backenduprightkid.vercel.app/api/media/${id}`);
       alert("Post deleted successfully!");
       fetchMediaPosts();
     } catch (error) {

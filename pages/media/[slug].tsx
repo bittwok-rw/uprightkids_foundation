@@ -30,14 +30,14 @@ const MediaPage = () => {
 
     const fetchMedia = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/media/${slug}`);
+        const res = await fetch(`https://backenduprightkid.vercel.app/api/media/${slug}`);
         if (!res.ok) throw new Error("Failed to fetch media item");
     
         const data: MediaItem = await res.json();
         setMediaItem(data);
     
         // Fetch all media to get related stories
-        const allMediaRes = await fetch("http://localhost:5000/api/media");
+        const allMediaRes = await fetch("https://backenduprightkid.vercel.app/api/media");
         if (!allMediaRes.ok) throw new Error("Failed to fetch other media");
     
         const allMediaData: MediaItem[] = await allMediaRes.json();

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5000/api/team";
+const API_BASE_URL = process.env.API_BASE_URL || "https://backenduprightkid.vercel.app/api/team";
 interface ApiResponse<T = unknown> {
   success: boolean;
   message?: string;

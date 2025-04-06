@@ -3,7 +3,7 @@ import formidable from "formidable";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://backenduprightkid.vercel.app";
 
 // Configure Cloudinary
 cloudinary.config({
