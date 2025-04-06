@@ -1,9 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { FaEllipsisV, FaTrash, FaEdit, FaPlus, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import dynamic from 'next/dynamic';
+
+// Define the proper type for media posts
+interface MediaPost {
+  _id: string;
+  title: string;
+  slug: string;
+  date: string;
+  image: string;
+  description: string;
+}
 
 // Import the editor dynamically with SSR disabled
 const ReactQuill = dynamic(() => import('react-quill'), { 
@@ -21,7 +32,7 @@ const UploadBlog = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [mediaPosts, setMediaPosts] = useState([]);
+  const [mediaPosts, setMediaPosts] = useState<MediaPost[]>([]);
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(true);
   const [expandedRows, setExpandedRows] = useState<{[key: string]: boolean}>({});
@@ -251,23 +262,31 @@ const UploadBlog = () => {
               </thead>
               <tbody>
                 {mediaPosts.length > 0 ? (
-                  mediaPosts.map((post: any, index: number) => (
+                  mediaPosts.map((post: MediaPost, index: number) => (
                     <tr key={post._id} className={`border-b hover:bg-indigo-50 transition-colors ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
                       <td className="p-4 font-medium text-indigo-800">{post.title}</td>
                       <td className="p-4 text-gray-700">{formatDate(post.date)}</td>
                       <td className="p-4">
                         <div className="relative group">
-                          <img 
-                            src={post.image} 
-                            alt={post.title} 
-                            className="w-16 h-16 rounded-lg object-cover border border-indigo-200 shadow-sm cursor-pointer transform transition hover:scale-110" 
-                          />
-                          <div className="absolute hidden group-hover:block top-0 left-20 z-10">
-                            <img 
+                          <div className="w-16 h-16 relative">
+                            <Image 
                               src={post.image} 
                               alt={post.title} 
-                              className="w-64 h-auto rounded-lg shadow-xl border-2 border-indigo-200" 
+                              fill
+                              sizes="64px"
+                              className="rounded-lg object-cover border border-indigo-200 shadow-sm cursor-pointer transform transition hover:scale-110" 
                             />
+                          </div>
+                          <div className="absolute hidden group-hover:block top-0 left-20 z-10">
+                            <div className="w-64 h-48 relative">
+                              <Image 
+                                src={post.image} 
+                                alt={post.title} 
+                                fill
+                                sizes="256px"
+                                className="rounded-lg shadow-xl border-2 border-indigo-200" 
+                              />
+                            </div>
                           </div>
                         </div>
                       </td>

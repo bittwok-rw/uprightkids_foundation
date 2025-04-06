@@ -2,15 +2,22 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import GetInvolved from "@/components/GetInvolved";
-import DonationSection from "@/components/landing/DonationSection";
 import DonationSection2 from "@/components/landing/DonationSection2";
+
+// Define proper interfaces for your project data
+interface Project {
+  slug: string;
+  title: string;
+  imageUrl: string;
+  description: string;
+}
 
 const ProjectDetails = () => {
   const router = useRouter();
   const { slug } = router.query; // ✅ Get slug from URL
 
-  const [project, setProject] = useState<any | null>(null);
-  const [otherProjects, setOtherProjects] = useState<any[]>([]);
+  const [project, setProject] = useState<Project | null>(null);
+  const [otherProjects, setOtherProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -30,9 +37,10 @@ const ProjectDetails = () => {
         // Fetch other projects (excluding current one)
         const projectsResponse = await fetch(`/api/projects`);
         const allProjects = await projectsResponse.json();
-        setOtherProjects(allProjects.filter((item: any) => item.slug !== slug));
-      } catch (err: any) {
-        setError(err.message);
+        setOtherProjects(allProjects.filter((item: Project) => item.slug !== slug));
+      } catch (err) {
+        const error = err as Error;
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -44,21 +52,6 @@ const ProjectDetails = () => {
   // Function to create safe HTML from rich text content
   const createMarkup = (htmlContent: string) => {
     return { __html: htmlContent };
-  };
-
-  // Function to truncate HTML content for other projects preview
-  const truncateHTML = (html: string, maxLength = 200) => {
-    // Remove HTML tags for length calculation
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    const textContent = div.textContent || div.innerText || "";
-    
-    if (textContent.length <= maxLength) {
-      return html;
-    }
-    
-    // Truncate the text content
-    return textContent.slice(0, maxLength) + "...";
   };
 
   if (loading) return <h1 className="text-center text-xl font-bold">Loading...</h1>;

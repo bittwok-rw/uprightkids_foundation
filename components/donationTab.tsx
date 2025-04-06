@@ -17,18 +17,26 @@ export function DonationTabs() {
   const [showForm, setShowForm] = useState(false);
   const [selectedTab, setSelectedTab] = useState("one");
   const [selectedAmount, setSelectedAmount] = useState<number | "custom" | null>(null);
-  const [customAmount, setCustomAmount] = useState<number | "">(0);
+  const [customAmount, setCustomAmount] = useState<number | null>(null);
 
   const handleAmountSelection = (amount: number | "custom") => {
     setSelectedAmount(amount);
     if (amount !== "custom") {
-      setCustomAmount(""); // Clear custom amount when switching to a preset
+      setCustomAmount(null); // Clear custom amount when switching to a preset
     }
   };
 
   const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setCustomAmount(value ? parseFloat(value) : "");
+    setCustomAmount(value ? parseFloat(value) : null);
+  };
+
+  // Helper function to get the amount to pass to DonateForm
+  const getDonationAmount = (): number | "custom" => {
+    if (selectedAmount === "custom") {
+      return customAmount !== null ? customAmount : "custom";
+    }
+    return selectedAmount !== null ? selectedAmount : 0; // Default to 0 if nothing selected
   };
 
   return (
@@ -91,7 +99,7 @@ export function DonationTabs() {
                 <p><strong>Selected Amount: </strong>${selectedAmount}{selectedTab === "monthly" && "/month"}</p>
               </div>
             )}
-            {selectedAmount === "custom" && customAmount && (
+            {selectedAmount === "custom" && customAmount !== null && (
               <div className="mt-4 text-white">
                 <p><strong>Custom Amount: </strong>${customAmount}</p>
               </div>
@@ -101,12 +109,12 @@ export function DonationTabs() {
             <Button
               onClick={() => setShowForm(true)}
               className="w-full rounded-full bg-accent text-black p-3"
-              disabled={!selectedAmount}
+              disabled={!selectedAmount || (selectedAmount === "custom" && customAmount === null)}
             >
               Donate Now
             </Button>
           </CardFooter>
-          {showForm && <DonateForm selectedAmount={selectedAmount === "custom" ? customAmount : selectedAmount} />}
+          {showForm && <DonateForm selectedAmount={getDonationAmount()} />}
         </Card>
       </TabsContent>
     </Tabs>

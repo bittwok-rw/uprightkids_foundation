@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import FAQSection from "@/components/FAQSection";
-import VolunteerForm from "@/components/VolunteerForm";
-import { CircleX } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const partnerOptions = [
   {
@@ -25,8 +24,6 @@ const partnerOptions = [
 
 const PartnerSection = () => {
   const [activeIndex, setActiveIndex] = useState(1);
-  const router = useRouter();
-
 
   return (
     <div className="py-10 px-4 md:px-8 max-w-6xl mx-auto mt-[20px]" id="partner">
@@ -256,10 +253,12 @@ const UprightKidsFoundation = () => {
                 <div className="flex flex-col gap-8">
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16">
-                    <img 
+                    <Image 
                       src="/images/Join_us.png.png"
                       alt="Upright Kids Foundation Logo"
-                      className="w-full h-full object-contain"
+                      width={64}
+                      height={64}
+                      className="object-contain"
                     />
                   </div>
                   <h2 className="text-white font-bold">Join Us</h2>

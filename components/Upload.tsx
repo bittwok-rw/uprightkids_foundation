@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -35,7 +36,7 @@ export default function Upload() {
       {imageUrl && (
         <div>
           <p>Uploaded Image:</p>
-          <img src={imageUrl} alt="Uploaded Preview" width="300" />
+          <Image src={imageUrl} alt="Uploaded Preview" width="300" />
         </div>
       )}
     </div>

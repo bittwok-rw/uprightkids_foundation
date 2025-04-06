@@ -32,22 +32,23 @@ const MediaPage = () => {
       try {
         const res = await fetch(`http://localhost:5000/api/media/${slug}`);
         if (!res.ok) throw new Error("Failed to fetch media item");
-
+    
         const data: MediaItem = await res.json();
         setMediaItem(data);
-
+    
         // Fetch all media to get related stories
         const allMediaRes = await fetch("http://localhost:5000/api/media");
         if (!allMediaRes.ok) throw new Error("Failed to fetch other media");
-
+    
         const allMediaData: MediaItem[] = await allMediaRes.json();
         setOtherMedia(allMediaData.filter((item) => item.slug !== slug));
-      } catch (err) {
-        setError("Failed to load media content");
+      } catch {
+        setError("Failed to load media content"); // No need for 'err' here
       } finally {
         setLoading(false);
       }
     };
+    
 
     fetchMedia();
   }, [slug]);

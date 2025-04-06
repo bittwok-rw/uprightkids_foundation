@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5000/api/team";
-
-interface ApiResponse {
+interface ApiResponse<T = unknown> {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: T;
   error?: string;
 }
+
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   const { method, body, query } = req;
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           message: "Method Not Allowed",
         });
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("API Error:", error);
     return res.status(500).json({
       success: false,
@@ -52,7 +52,7 @@ async function handleGetRequest(res: NextApiResponse<ApiResponse>) {
   });
 }
 
-async function handlePostRequest(res: NextApiResponse<ApiResponse>, body: any) {
+async function handlePostRequest(res: NextApiResponse<ApiResponse>, body: unknown) {
   const response = await fetch(API_BASE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -75,7 +75,7 @@ async function handlePostRequest(res: NextApiResponse<ApiResponse>, body: any) {
 async function handlePutRequest(
   res: NextApiResponse<ApiResponse>,
   id: string | string[] | undefined,
-  body: any
+  body: unknown
 ) {
   if (!id) {
     return res.status(400).json({
@@ -133,7 +133,7 @@ async function handleDeleteRequest(
       success: true,
       message: "Team member deleted successfully",
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Delete Error:", error);
     return res.status(500).json({
       success: false,

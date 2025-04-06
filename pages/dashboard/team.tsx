@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FaUserPlus, FaUser, FaTimes } from "react-icons/fa";
 import axios from "axios";
+import Image from "next/image";
 
-// Define TeamMember interface
 interface TeamMember {
   _id: string;
   name: string;
@@ -14,7 +13,6 @@ interface TeamMember {
   image: string;
   description: string;
 }
-
 
 export default function AddTeamMemberPage() {
   const [name, setName] = useState("");
@@ -28,29 +26,27 @@ export default function AddTeamMemberPage() {
   const [actionMenu, setActionMenu] = useState<string | null>(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [toast, setToast] = useState<{message: string, type: 'success' | 'error'} | null>(null);
-  const router = useRouter();
 
-  useEffect(() => {
-    fetchTeamMembers();
-  }, []);
-
-  // Show toast message
-  const showToast = (message: string, type: 'success' | 'error') => {
+  const showToast = useCallback((message: string, type: 'success' | 'error') => {
     setToast({message, type});
     setTimeout(() => setToast(null), 3000);
-  };
+  }, []);
 
-  const fetchTeamMembers = async () => {
+  const fetchTeamMembers = useCallback(async () => {
     try {
       const response = await fetch("/api/team");
       if (!response.ok) throw new Error("Failed to fetch team members");
       const data = await response.json();
-      setTeamMembers(data.data || data); // Handle both response formats
+      setTeamMembers(data.data || data);
     } catch (error) {
       console.error("Error fetching team members:", error);
       showToast("Failed to load team members", "error");
     }
-  };
+  }, [showToast]);
+
+  useEffect(() => {
+    fetchTeamMembers();
+  }, [fetchTeamMembers]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,12 +103,9 @@ export default function AddTeamMemberPage() {
     setDescription(member.description);
     setActionMenu(null);
     setIsFormVisible(true);
-    
-    // Scroll to form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle delete team
   const handleDelete = async (id: string) => {
     if (!id) {
       alert("Invalid member ID.");
@@ -122,30 +115,26 @@ export default function AddTeamMemberPage() {
     if (!confirm("Are you sure you want to delete this member?")) return;
   
     try {
-      console.log("Attempting to delete member with ID:", id); // Debugging
-  
       const response = await axios.delete(`http://localhost:5000/api/team/${id}`, {
-        headers: { "Content-Type": "application/json" }, // Ensure proper headers
+        headers: { "Content-Type": "application/json" },
       });
-  
-      console.log("Delete response:", response.data); // Debugging
-  
+    
+      console.log("Response:", response); // Log the response if needed
+    
       alert("Member deleted successfully!");
-      fetchTeamMembers(); // Refresh list after deletion
-    } catch (error: any) {
-      console.error("Error deleting member:", error.response?.data || error.message);
-      
-      alert(`Failed to delete member: ${error.response?.data?.message || "Unknown error"}`);
+      fetchTeamMembers();
+    } catch (error: unknown) {
+      console.error("Error deleting member:", (error as {response?: {data?: {message?: string}}}).response?.data?.message || error);
+      alert(`Failed to delete member: ${(error as {response?: {data?: {message?: string}}}).response?.data?.message || "Unknown error"}`);
     }
+    
   };
-  
 
   const truncateText = (text: string, maxLength = 80) => {
     if (!text) return "";
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
   };
 
-  // Handle image loading errors
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const img = e.currentTarget;
     img.onerror = null;
@@ -154,7 +143,6 @@ export default function AddTeamMemberPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      {/* Toast Notification */}
       {toast && (
         <div 
           className={`fixed top-4 right-4 text-white p-4 rounded shadow-lg z-50 transition-opacity duration-300 ${
@@ -186,7 +174,6 @@ export default function AddTeamMemberPage() {
           </button>
         </div>
         
-        {/* Form Section - Collapsible */}
         {isFormVisible && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-8 transform transition-all duration-300">
             <h2 className="text-xl font-semibold mb-6 text-gray-700 border-b pb-2">
@@ -238,11 +225,13 @@ export default function AddTeamMemberPage() {
               {image && (
                 <div className="space-y-2 flex flex-col justify-end">
                   <label className="block text-sm font-medium text-gray-700">Image Preview</label>
-                  <div className="h-24 w-24 rounded-full overflow-hidden bg-gray-100 border">
-                    <img 
+                  <div className="h-24 w-24 rounded-full overflow-hidden bg-gray-100 border relative">
+                    <Image 
                       src={image} 
                       alt="Preview" 
-                      className="w-full h-full object-cover" 
+                      className="object-cover" 
+                      fill
+                      sizes="96px"
                       onError={handleImageError}
                     />
                   </div>
@@ -294,7 +283,6 @@ export default function AddTeamMemberPage() {
           </div>
         )}
         
-        {/* Team Members List Section */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6 border-b">
             <h2 className="text-xl font-semibold text-gray-800">Team Members</h2>
@@ -307,7 +295,7 @@ export default function AddTeamMemberPage() {
                 <FaUser className="text-gray-300 text-5xl mb-4" />
                 <p className="text-lg font-medium mb-1">No team members found</p>
                 <p className="text-sm text-gray-500">
-                  Click the "Add Team Member" button to get started
+                  Click the &quot;Add Team Member&quot; button to get started
                 </p>
               </div>
             </div>
@@ -327,11 +315,13 @@ export default function AddTeamMemberPage() {
                   {teamMembers.map((member) => (
                     <tr key={member._id} className="hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-4">
-                        <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 border mx-auto">
-                          <img 
+                        <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 border mx-auto relative">
+                          <Image 
                             src={member.image} 
                             alt={member.name} 
-                            className="w-full h-full object-cover" 
+                            className="object-cover" 
+                            fill
+                            sizes="64px"
                             onError={handleImageError}
                           />
                         </div>

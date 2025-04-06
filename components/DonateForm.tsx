@@ -7,23 +7,16 @@ import * as z from "zod";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Checkbox } from "@/components/ui/checkbox";  // Adjust path as needed
+import Image from "next/image";
 
+interface DonateFormProps {
+  selectedAmount: number | "custom";
+}
 
-const DonateForm = ({ selectedAmount }: any) => {
+const DonateForm = ({ selectedAmount }: DonateFormProps) => {
   const [step, setStep] = useState<number>(1); // 1: Personal, 2: Review, 3: Payment
   const [loading, setLoading] = useState<boolean>(false);
   const [paymentMethod, setPaymentMethod] = useState<"Card" | "PayPal" | "G Pay">("Card");
-
-  // Schema for Step 1 (Personal Details)
-  const formSchemaStep1 = z.object({
-    title: z.enum(["Mr", "Ms", "Mrs", "Dr", "Other"]),
-    firstName: z.string().min(2, "First name is required").trim(),
-    lastName: z.string().min(2, "Last name is required").trim(),
-    email: z.string().email("Invalid email address").trim(),
-    phoneNumber: z.string().min(10, "Phone number is too short").trim(),
-    receiveNewsletter: z.boolean(),
-    agreeToTerms: z.boolean().refine((val) => val, "You must agree to terms and conditions"),
-  });
 
   // Schema for Step 3 (Payment Details)
   const formSchema = z.object({
@@ -43,7 +36,9 @@ const DonateForm = ({ selectedAmount }: any) => {
     securityCode: z.string().min(3, "Security code must be 3-4 digits").max(4).optional(),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  type FormValues = z.infer<typeof formSchema>;
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
@@ -61,26 +56,23 @@ const DonateForm = ({ selectedAmount }: any) => {
     },
   });
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: FormValues) => {
     setLoading(true);
     try {
       await axios.post('/api/donate', {
         ...values,
-        amount: selectedAmount,
+        amount: selectedAmount,  // Pass the selected amount
         paymentMethod,
       });
       toast.success("Donation submitted successfully!");
       form.reset();
-    } catch (error) {
+    } catch {
       toast.error("Failed to submit donation. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
-
-
-
+  
 
   return (
     <div className="bg-primary p-8 flex flex-col gap-4 text-white overflow-y-auto">
@@ -284,7 +276,7 @@ const DonateForm = ({ selectedAmount }: any) => {
               : "bg-white text-gray-700 border border-gray-300"
           }`}
         >
-          <img 
+          <Image 
             src="/images/image.png" 
             alt="PayPal" 
             className="mr-2 w-8 h-8"
@@ -299,7 +291,7 @@ const DonateForm = ({ selectedAmount }: any) => {
               : "bg-white text-gray-700 border border-gray-300"
           }`}
         >
-          <img 
+          <Image
             src="/images/download.png" 
             alt="Card" 
             className="mr-2 w-8 h-8"
@@ -339,7 +331,7 @@ const DonateForm = ({ selectedAmount }: any) => {
                   name="cardName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cardholder's Name *</FormLabel>
+                      <FormLabel>Cardholder&apos;s Name *</FormLabel>
                       <FormControl>
                         <Input
                           className="text-black bg-white"
@@ -418,7 +410,7 @@ const DonateForm = ({ selectedAmount }: any) => {
               : "bg-white text-gray-700 border border-gray-300"
           }`}
         >
-      <img 
+      <Image 
         src="/images/icons8-google-48.png" 
         alt="Google Pay" 
         className="w-6 h-6"

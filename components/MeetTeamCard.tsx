@@ -19,6 +19,7 @@ const MeetTeamCard = () => {
     const fetchTeamMembers = async () => {
       try {
         const response = await fetch("/api/team");
+
         if (!response.ok) {
           throw new Error(`API error: ${response.status} ${response.statusText}`);
         }

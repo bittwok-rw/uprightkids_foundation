@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+// Remove the unused useRouter import
 import { FaEllipsisV, FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 // Import React Quill dynamically (without SSR) since it requires browser environment
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -28,8 +29,8 @@ export default function AddProjectPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const router = useRouter();
-
+  // Remove unused router
+  
   useEffect(() => {
     fetchProjects();
   }, []);
@@ -63,7 +64,7 @@ export default function AddProjectPage() {
         try {
           const errorData = await response.json();
           errorMessage = errorData.message || "Failed to add project.";
-        } catch (parseError) {
+        } catch {
           // If JSON parsing fails, use status text or a generic message
           errorMessage = `Server error: ${response.status} ${response.statusText || "Unknown error"}`;
         }
@@ -289,7 +290,7 @@ export default function AddProjectPage() {
                       <td className="py-4 px-4">
                         {project.imageUrl ? (
                           <div className="w-16 h-16 rounded-md overflow-hidden bg-gray-100 border">
-                            <img 
+                            <Image 
                               src={project.imageUrl} 
                               alt={project.title} 
                               className="w-full h-full object-cover" 
@@ -334,7 +335,7 @@ export default function AddProjectPage() {
                         </svg>
                         <p className="text-lg font-medium mb-1">No projects found</p>
                         <p className="text-sm text-gray-500">
-                          Click the "Add New Project" button to get started
+                          Click the &quot;Add New Project&quot; button to get started
                         </p>
                       </div>
                     </td>

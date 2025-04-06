@@ -64,15 +64,15 @@ const Contact = () => {
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [modalIsOpenPayment, setIsOpenPayment] = useState(false);
+  //const [modalIsOpenPayment, setIsOpenPayment] = useState(false);
   const [modalIsOpenDonate, setIsOpenDonate] = useState(false);
   const [mediaData, setMediaData] = useState<MediaItem[]>([]);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const closeModalDonate = () => setIsOpenDonate(false);
-  const openModalPayment = () => setIsOpenPayment(true);
-  const closeModalPayment = () => setIsOpenPayment(false);
+  //const openModalPayment = () => setIsOpenPayment(true);
+  //const closeModalPayment = () => setIsOpenPayment(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -117,7 +117,7 @@ const Contact = () => {
 
   const handlePreFillMessage = (message: string) => {
     form.setValue("message", message);
-    openModalPayment();
+    //openModalPayment();
   };
 
   const displayedMedia = showAll ? mediaData : mediaData.slice(0, 4);
@@ -135,7 +135,7 @@ const Contact = () => {
                   <div className="my-4 flex flex-col gap-8">
                     <h2 className="text-5xl leading-[3.5rem]">GET IN TOUCH WITH UPRIGHT KIDS FOUNDATION</h2>
                     <p className="text-black">
-                      We'd love to hear from you! Whether you're interested in learning more about our programs, partnering with us, or exploring ways to support our mission. Please reach out to us with any questions via the following means:
+                      We would love to hear from you! Whether you are interested in learning more about our programs, partnering with us, or exploring ways to support our mission. Please reach out to us with any questions via the following means:
                     </p>
                   </div>
                 </div>

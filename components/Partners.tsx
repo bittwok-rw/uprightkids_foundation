@@ -3,19 +3,22 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css"; 
 import Image from "next/image"; 
 import Link from "next/link"; 
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi"; 
 import { useState } from "react";
+
+// Custom Arrow component types
+interface ArrowProps {
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}
 
 export default function LogoSlider() {   
   const [activeArrow, setActiveArrow] = useState<'none' | 'prev' | 'next'>('none');
   
   // Custom arrow components with active state
-  const NextArrow = (props: any) => {     
-    const { onClick } = props;     
-    
-    const handleClick = () => {
+  const NextArrow = ({ onClick, ...props }: ArrowProps) => {     
+    const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       setActiveArrow('next');
-      onClick();
+      onClick?.(event);  // Pass the event to the onClick handler
       
       // Reset after a short delay
       setTimeout(() => {
@@ -25,22 +28,19 @@ export default function LogoSlider() {
     
     return (       
       <div         
-        className={`absolute top-1/2 -right-4 transform -translate-y-1/2 ${
-          activeArrow === 'next' ? 'bg-blue-600' : 'bg-white'
-        } hover:bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-lg z-10`}
+        className={`absolute top-1/2 -right-4 transform -translate-y-1/2 ${activeArrow === 'next' ? 'bg-blue-600' : 'bg-white'} hover:bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-lg z-10`}        
         onClick={handleClick}       
+        {...props} // Spread any additional props here       
       >         
         <FiChevronRight className={`${activeArrow === 'next' ? 'text-white' : 'text-gray-700'} text-lg`} />       
       </div>     
     );   
   };    
   
-  const PrevArrow = (props: any) => {     
-    const { onClick } = props;     
-    
-    const handleClick = () => {
+  const PrevArrow = ({ onClick, ...props }: ArrowProps) => {     
+    const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       setActiveArrow('prev');
-      onClick();
+      onClick?.(event);  // Pass the event to the onClick handler
       
       // Reset after a short delay
       setTimeout(() => {
@@ -50,10 +50,9 @@ export default function LogoSlider() {
     
     return (       
       <div         
-        className={`absolute top-1/2 -left-4 transform -translate-y-1/2 ${
-          activeArrow === 'prev' ? 'bg-blue-600' : 'bg-white'
-        } hover:bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-lg z-10`}
+        className={`absolute top-1/2 -left-4 transform -translate-y-1/2 ${activeArrow === 'prev' ? 'bg-blue-600' : 'bg-white'} hover:bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer transition-all duration-300 shadow-lg z-10`}        
         onClick={handleClick}       
+        {...props} // Spread any additional props here       
       >         
         <FiChevronLeft className={`${activeArrow === 'prev' ? 'text-white' : 'text-gray-700'} text-lg`} />       
       </div>     
