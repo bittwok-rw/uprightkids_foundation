@@ -6,12 +6,12 @@ import { useRouter } from "next/router";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const isDashboard = router.pathname.startsWith("/dashboard");
-  const isLoginPage = router.pathname === "/login"; // Check if it's the login page
+  const isLoginPage = router.pathname === "/login"; 
 
   return isLoginPage ? (
-    <Component {...pageProps} /> // Render only the component for login page without WebLayout
+    <Component {...pageProps} /> 
   ) : isDashboard ? (
-    <Component {...pageProps} /> // Render component for dashboard (if needed)
+    <Component {...pageProps} /> 
   ) : (
     <WebLayout>
       <Component {...pageProps} />

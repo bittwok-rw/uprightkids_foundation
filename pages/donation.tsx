@@ -232,41 +232,65 @@ const Donation = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-8 items-center justify-center py-16">
-        <div className="w-[80%] flex flex-col gap-12 p-8 bg-primary items-center">
-          <h2 className="text-white">Different Ways to Give</h2>
-          <div className="grid grid-cols-2 gap-16">
-            <div className="bg-white/10 p-4 text-center">
-              <h3 className="text-white">Donate Online</h3>
-              <p className="text-white">
-                Click below to make a secure donation. Choose between a one-time
-                or monthly gift and select the amount that works best for you.
-              </p>
-            </div>
-            <div className="bg-white/10 p-4 text-center">
-              <h3 className="text-white">Mail a Check</h3>
-              <p className="text-white">
-                Send your contribution to:Upright Kids Foundation 204, Avenue
-                Emery Patrice Lumumba,Bukavu, DRC
-              </p>
-            </div>
-            <div className="bg-white/10 p-4 text-center">
-              <h3 className="text-white">Bank Transfer</h3>
-              <p className="text-white">
-                Contact us at info@uprightkidsfoundation.org to request banking
-                details for direct transfers.
-              </p>
-            </div>
-            <div className="bg-white/10 p-4 text-center">
-              <h3 className="text-white">In-Kind Donations</h3>
-              <p className="text-white">
-                We also accept stocks, supplies, and other in-kind
-                contributions. Reach out to discuss how your gifts can support
-                our mission.
-              </p>
-            </div>
-          </div>
+
+      <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6">
+  <div className="w-full max-w-7xl flex flex-col gap-6 p-6 md:p-8 bg-primary items-center rounded-lg">
+    <h2 className="text-white text-[32px] sm:text-[40px] font-bold text-center mb-6 sm:mb-8 leading-snug">
+      Different Ways to Give
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 w-full">
+      {[
+        {
+          title: "Donate Online",
+          description: "Click below to make a secure donation. Choose between a one-time or monthly gift and select the amount that works best for you.",
+        },
+        {
+          title: "Mail a Check",
+          description: (
+            <>
+              Send your contribution to:<br />
+              <strong className="text-white">Upright Kids Foundation</strong><br />
+              204, Avenue Emery Patrice Lumumba,<br />
+              Bukavu, DRC
+            </>
+          )
+        },
+        {
+          title: "Bank Transfer",
+          description: (
+            <>
+              Contact us at{" "}
+              <span className="break-all font-bold text-white">
+                info@uprightkidsfoundation.org
+              </span>{" "}
+              to request banking details.
+            </>
+          ),
+        },
+        {
+          title: "In-Kind Donations",
+          description: "We also accept stocks, supplies, and other in-kind contributions. Reach out to discuss how your gifts can support our mission.",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="bg-white/10 p-4 sm:p-5 text-center rounded-lg border border-white/20 w-full min-h-[140px] sm:min-h-[150px] flex flex-col justify-center hover:bg-white/15 transition-colors"
+        >
+          <h3 className="text-white text-[28px] sm:text-[40px] font-bold mb-2 sm:mb-3 leading-tight">
+            {item.title}
+          </h3>
+          <p className="text-white/90 text-xs sm:text-sm md:text-base mt-1 sm:mt-2">
+            {item.description}
+          </p>
         </div>
+      ))}
+    </div>
+  </div>
+
+
+
+
+
         <Projects />
         <GetInvolved/>
       </div>

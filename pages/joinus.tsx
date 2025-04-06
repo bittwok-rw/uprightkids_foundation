@@ -4,7 +4,7 @@ import VolunteerForm from "@/components/VolunteerForm";
 import { CircleX } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
-import Modal from "react-modal";
+import { useRouter } from "next/router";
 
 const partnerOptions = [
   {
@@ -12,156 +12,129 @@ const partnerOptions = [
     description:
       "If you're part of an organization or company, partner with us to help amplify our efforts. Together, we can reach even more children in need and create lasting change.",
     buttonText: "Partner With Us",
+    link: "/contact"
   },
   {
     title: "JOIN AS A VOLUNTEER",
     description:
       "Stay connected with the work we're doing. By staying informed, you can learn more about our projects, the issues children face, and how we're addressing them.",
     buttonText: "Volunteer",
+    link: "/contact"
   },
 ];
 
 const PartnerSection = () => {
   const [activeIndex, setActiveIndex] = useState(1);
-  const [modalIsOpenPayment, setIsOpenPayment] = useState(false);
+  const router = useRouter();
 
-  const openModalPayment = (e:any) => {
-    e.stopPropagation();
-    setIsOpenPayment(true);
-  };
-
-  const closeModalPayment = () => setIsOpenPayment(false);
 
   return (
     <div className="py-10 px-4 md:px-8 max-w-6xl mx-auto mt-[20px]" id="partner">
-      <div className="w-16 h-1 bg-black mb-4"></div>
-      <h2 className="text-4xl font-bold mb-4">Become a Partner</h2>
-      <p className="text-lg mb-10 max-w-3xl text-black">
-      We are deeply grateful for the support and collaboration of our global supporters, who are an essential part of our global family. Their dedication and contributions help us empower children and families out of poverty in Congo. 
-      </p>
-      <p className="text-lg mb-10 max-w-3xl text-black">
-      We are always open to partnering with individuals, organizations, social enterprises and like-minded businesses. Together, we can create lasting change, expand our reach, and continue building brighter futures for children.      </p>
+    <div className="w-16 h-1 bg-black mb-4"></div>
+    <h2 className="text-4xl font-bold mb-4">Become a Partner</h2>
+    <p className="text-lg mb-10 max-w-3xl text-black">
+    We are deeply grateful for the support and collaboration of our global supporters, who are an essential part of our global family. Their dedication and contributions help us empower children and families out of poverty in Congo. 
+    </p>
+    <p className="text-lg mb-10 max-w-3xl text-black">
+    We are always open to partnering with individuals, organizations, social enterprises and like-minded businesses. Together, we can create lasting change, expand our reach, and continue building brighter futures for children.      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {partnerOptions.map((option, index) => (
-          <div
-            key={index}
-            onClick={() => setActiveIndex(index)} // Set active card
-            className={`relative p-8 flex flex-col justify-between items-center rounded-lg shadow-lg transition-all duration-300 ease-in-out cursor-pointer 
-              ${
-                index === activeIndex
-                  ? `border-t-4 border-green-500 bg-primary text-white scale-105 shadow-2xl`
-                  : `border-t-4 border-red-500 bg-white text-black`
-              }`}
-          >
-            <div>
-            <h3 className="text-2xl font-bold mb-4">{option.title}</h3>
-            <p className="mb-6">{option.description}</p>
-            </div>
-           <div> <button
-              onClick={openModalPayment}
-              className="bg-blue-500 text-white py-2 px-6 rounded transition duration-300 hover:bg-blue-700"
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {partnerOptions.map((option, index) => (
+        <div
+          key={index}
+          onClick={() => setActiveIndex(index)}
+          className={`relative p-8 flex flex-col justify-between items-center rounded-lg shadow-lg transition-all duration-300 ease-in-out cursor-pointer 
+            ${
+              index === activeIndex
+                ? `border-t-4 border-green-500 bg-primary text-white scale-105 shadow-2xl`
+                : `border-t-4 border-red-500 bg-white text-black`
+            }`}
+        >
+          <div>
+            <h3 className="text-2xl font-bold mb-4 text-center md:text-left">{option.title}</h3>
+            <p className="mb-6 text-center md:text-left">{option.description}</p>
+          </div>
+          <div className="w-full flex justify-center md:justify-start">
+            <Link 
+              href={option.link || "#"} 
+              className="bg-blue-500 text-white py-2 px-6 rounded transition duration-300 hover:bg-blue-700 w-full md:w-auto text-center"
             >
               {option.buttonText}
-            </button></div>
+            </Link>
           </div>
-        ))}
-      </div>
-
-      <Modal
-        isOpen={modalIsOpenPayment}
-        onRequestClose={closeModalPayment}
-        contentLabel="Modal"
-        bodyOpenClassName="modal-open"
-        style={customStyles}
-      >
-        <div className="relative">
-          <VolunteerForm />
-          <button
-            onClick={closeModalPayment}
-            className="absolute top-2 right-2 text-primary p-2 rounded-full bg-transparent hover:bg-gray-600 transition duration-200"
-          >
-            <CircleX />
-          </button>
         </div>
-      </Modal>
+      ))}
     </div>
-  );
+  </div>
+);
 };
 
 const DonateSection = () => {
   return (
-    <div className="bg-[#033AB9] text-white py-10 px-4 md:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl text-white font-bold text-center mb-12">
-          Different Ways to Give
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Donate Online */}
-          <div className="bg-blue-500 p-6 rounded">
-            <h3 className="text-2xl font-bold mb-3 text-center">
-              Donate Online
-            </h3>
-            <p className="text-center mb-4">
-              Click below to make a secure donation. Choose between a one-time
-              or monthly gift and select the amount that works best for you.
-            </p>
-          </div>
-
-          {/* Mail a Check */}
-          <div className="bg-blue-500 p-6 rounded">
-            <h3 className="text-2xl font-bold mb-3 text-center">
-              Mail a Check
-            </h3>
-            <p className="text-center">
-              Send your contribution to:
-              <br />
-              <strong>Upright Kids Foundation</strong>
-              <br />
-              204, Avenue Emery Patrice Lumumba,
-              <br />
+    <div className="flex flex-col items-center justify-center py-8 sm:py-12 px-4 sm:px-6">
+  <div className="w-full max-w-7xl flex flex-col gap-6 p-6 md:p-8 bg-primary items-center rounded-lg">
+    <h2 className="text-white text-[32px] sm:text-[40px] font-bold text-center mb-6 sm:mb-8 leading-snug">
+      Different Ways to Give
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 w-full">
+      {[
+        {
+          title: "Donate Online",
+          description: "Click below to make a secure donation. Choose between a one-time or monthly gift and select the amount that works best for you.",
+        },
+        {
+          title: "Mail a Check",
+          description: (
+            <>
+              Send your contribution to:<br />
+              <strong className="text-white">Upright Kids Foundation</strong><br />
+              204, Avenue Emery Patrice Lumumba,<br />
               Bukavu, DRC
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Bank Transfer */}
-          <div className="bg-[#005BBF] p-6 rounded">
-            <h3 className="text-2xl font-bold mb-3 text-center">
-              Bank Transfer
-            </h3>
-            <p className="text-center">
+            </>
+          )
+        },
+        {
+          title: "Bank Transfer",
+          description: (
+            <>
               Contact us at{" "}
-              <span className=" font-bold ">
+              <span className="break-all font-bold text-white">
                 info@uprightkidsfoundation.org
               </span>{" "}
-              to request banking details for direct transfers.
-            </p>
-          </div>
-
-          {/* In-Kind Donations */}
-          <div className="bg-blue-500 p-6 rounded">
-            <h3 className="text-2xl font-bold mb-3 text-center">
-              In-Kind Donations
-            </h3>
-            <p className="text-center">
-              We also accept stocks, supplies, and other in-kind contributions.
-              Reach out to discuss how your gifts can support our mission.
-            </p>
-          </div>
+              to request banking details.
+            </>
+          ),
+        },
+        {
+          title: "In-Kind Donations",
+          description: "We also accept stocks, supplies, and other in-kind contributions. Reach out to discuss how your gifts can support our mission.",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="bg-white/10 p-4 sm:p-5 text-center rounded-lg border border-white/20 w-full min-h-[140px] sm:min-h-[150px] flex flex-col justify-center hover:bg-white/15 transition-colors"
+        >
+          <h3 className="text-white text-[28px] sm:text-[40px] font-bold mb-2 sm:mb-3 leading-tight">
+            {item.title}
+          </h3>
+          <p className="text-white/90 text-xs sm:text-sm md:text-base mt-1 sm:mt-2">
+            {item.description}
+          </p>
         </div>
-      </div>
-      
+      ))}
     </div>
+  </div>
+</div>
   );
 };
 
 const SupportWaysSection = () => {
-  const [modalIsOpenPayment, setIsOpenPayment] = useState(false);
-  const openModalPayment = () => setIsOpenPayment(true);
-  const closeModalPayment = () => setIsOpenPayment(false);
+  const router = useRouter();
+
+  const handleJoinClick = (e: any) => {
+    e.preventDefault();
+    router.push('/contact');
+  };
 
   const supportWays = [
     {
@@ -209,7 +182,10 @@ const SupportWaysSection = () => {
         </div>
 
         <div className="mt-8 flex justify-center">
-          <button onClick={openModalPayment} className="bg-accent text-primary font-bold py-3 px-8 flex items-center">
+          <button 
+            onClick={handleJoinClick} 
+            className="bg-accent text-primary font-bold py-3 px-8 flex items-center"
+          >
             Join Us
             <svg
               className="ml-2 w-4 h-4"
@@ -227,24 +203,6 @@ const SupportWaysSection = () => {
           </button>
         </div>
       </div>
-      <Modal
-        isOpen={modalIsOpenPayment}
-        onRequestClose={closeModalPayment}
-        contentLabel="Modal"
-        bodyOpenClassName="modal-open"
-        style={customStyles}
-      >
-        <>
-          <VolunteerForm />
-          <button
-            onClick={closeModalPayment}
-            className="absolute top-2 right-2 text-primary p-2 rounded-full bg-transparent hover:bg-gray-600 transition duration-200"
-          >
-            <CircleX />
-          </button>
-        </>
-      </Modal>
-
     </div>
   );
 };
@@ -285,7 +243,7 @@ const UprightKidsFoundation = () => {
       url('/images/Rectangle 3463481.png')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundColor: "transparent", // Transparent since an image is provided
+          backgroundColor: "transparent",
         }}
       >
         <div className="flex justify-center">
@@ -297,32 +255,29 @@ const UprightKidsFoundation = () => {
                 </div>
                 <div className="flex flex-col gap-8">
                 <div className="flex items-center gap-4">
-  {/* Logo on the left */}
-  <div className="w-16 h-16"> {/* Adjust width and height as needed */}
-    <img 
-      src="/images/Join_us.png.png" // Replace with your actual logo path
-      alt="Upright Kids Foundation Logo"
-      className="w-full h-full object-contain"
-    />
-  </div>
-  
-  {/* "Join Us" heading on the right */}
-  <h2 className="text-white font-bold">Join Us</h2>
-</div>
+                  <div className="w-16 h-16">
+                    <img 
+                      src="/images/Join_us.png.png"
+                      alt="Upright Kids Foundation Logo"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <h2 className="text-white font-bold">Join Us</h2>
+                </div>
 
-<div className="my-4 text-white flex flex-col gap-8">
-  <p className="text-white">
-    Upright Kids Foundation is reaching out to the global community to support its important projects and help transform the lives of vulnerable children in the Democratic Republic of Congo. Together, we can make a real difference. Here are some ways you can get involved
-  </p>
-</div>
+                <div className="my-4 text-white flex flex-col gap-8">
+                  <p className="text-white">
+                    Upright Kids Foundation is reaching out to the global community to support its important projects and help transform the lives of vulnerable children in the Democratic Republic of Congo. Together, we can make a real difference. Here are some ways you can get involved
+                  </p>
+                </div>
                   <div>
-					<Link
-						href="/joinus#partner"
-						className="px-8 py-4 bg-primary text-lg text-white rounded-md hover:bg-yellow-500 font-semibold stroke-tertiary-900 transition-colors duration-300"
-					>
-					Get involved
-					</Link>
-				</div>
+                    <Link
+                      href="/joinus#partner"
+                      className="px-8 py-4 bg-primary text-lg text-white rounded-md hover:bg-yellow-500 font-semibold stroke-tertiary-900 transition-colors duration-300"
+                    >
+                      Get involved
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -334,32 +289,8 @@ const UprightKidsFoundation = () => {
       <DonateSection />
       <FAQSection />
       <SupportSection />
-
-
-  
     </div>
   );
 };
-const customStyles = {
-  overlay: {
-    zIndex: 9999,
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-  },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    color: "#000",
-    maxWidth: "80vw",
-    maxHeight: "80vh",
-    width: "100%",
-    height: "auto",
-    zIndex: 9999,
-    padding: 0,
-    overflow: "hidden",
-  },
-};
+
 export default UprightKidsFoundation;

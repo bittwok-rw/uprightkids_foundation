@@ -3,6 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaEllipsisV, FaTrash, FaEdit, FaPlus } from "react-icons/fa";
+import dynamic from "next/dynamic";
+
+// Import React Quill dynamically (without SSR) since it requires browser environment
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
 // Define the Project type
 interface Project {
@@ -43,7 +48,7 @@ export default function AddProjectPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
       const payload = { title, description, imageUrl, slug };
       const response = await fetch("/api/projects", {
@@ -51,7 +56,19 @@ export default function AddProjectPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!response.ok) throw new Error("Failed to add project.");
+      
+      if (!response.ok) {
+        // Try to parse as JSON first, but handle non-JSON responses too
+        let errorMessage;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || "Failed to add project.";
+        } catch (parseError) {
+          // If JSON parsing fails, use status text or a generic message
+          errorMessage = `Server error: ${response.status} ${response.statusText || "Unknown error"}`;
+        }
+        throw new Error(errorMessage);
+      }
       
       // Use toast notification instead of alert
       const successToast = document.getElementById("success-toast");
@@ -72,7 +89,6 @@ export default function AddProjectPage() {
       setLoading(false);
     }
   };
-
   const handleDelete = async (slug: string) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
   
@@ -104,10 +120,28 @@ export default function AddProjectPage() {
     }
   };
   
+  // Rich text editor modules config
+  const quillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link', 'image'],
+      ['clean']
+    ],
+  };
+
+  const quillFormats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet',
+    'link', 'image'
+  ];
 
   const truncateText = (text: string | undefined, maxLength = 100) => {
-    if (!text) return "";
-    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+    // Strip HTML tags for display in the table
+    const strippedText = text ? text.replace(/<[^>]*>?/gm, '') : "";
+    return strippedText.length > maxLength ? strippedText.substring(0, maxLength) + "..." : strippedText;
   };
 
   // Type-safe image error handler
@@ -116,6 +150,8 @@ export default function AddProjectPage() {
     img.onerror = null;
     img.src = "https://via.placeholder.com/150?text=No+Image";
   };
+
+  
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -186,17 +222,21 @@ export default function AddProjectPage() {
               
               <div className="space-y-2 md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700">Project Description</label>
-                <textarea
-                  placeholder="Describe your project"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                  rows={4}
-                  className="w-full border-gray-300 border p-3 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
-                />
+                {typeof window !== 'undefined' && (
+                  <ReactQuill
+                    theme="snow"
+                    value={description}
+                    onChange={setDescription}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    placeholder="Describe your project"
+                    className="bg-white rounded-md"
+                    style={{ height: '200px', marginBottom: '50px' }}
+                  />
+                )}
               </div>
               
-              <div className="md:col-span-2 mt-2">
+              <div className="md:col-span-2 mt-16">
                 <button 
                   type="submit" 
                   className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition duration-200 flex items-center justify-center"
@@ -275,12 +315,11 @@ export default function AddProjectPage() {
                               <FaEdit size={14} /> Edit Project
                             </button>
                             <button
-  className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
-  onClick={() => handleDelete(project.slug)} // Use project.slug instead of project._id
->
-  <FaTrash size={14} /> Delete Project
-</button>
-
+                              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left"
+                              onClick={() => handleDelete(project.slug)}
+                            >
+                              <FaTrash size={14} /> Delete Project
+                            </button>
                           </div>
                         )}
                       </td>

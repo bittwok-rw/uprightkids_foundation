@@ -10,9 +10,9 @@ export default function DonationCard({
 	className = "",
 }: DonationCardProps) {
 	return (
-		<div className={`p-10 px-8 rounded-lg ${className}`}>
-			<h3 className="text-2xl font-bold text-white mb-2">{amount}</h3>
-			<p className="text-base text-white">{description}</p>
+		<div className={`p-2 px-5 rounded-lg ${className}`}>
+			<h3 className="text-xl font-bold text-white mb-1">{amount}</h3>
+			<p className="text-sm text-white">{description}</p>
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import { ArrowRight, CircleX } from "lucide-react";
+import { ArrowRight, CircleX } from "lucide-react"; 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import {
@@ -21,7 +21,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
-import VolunteerForm from "@/components/VolunteerForm";
+
 
 const customStyles = {
   overlay: {
@@ -115,6 +115,11 @@ const Contact = () => {
     }
   };
 
+  const handlePreFillMessage = (message: string) => {
+    form.setValue("message", message);
+    openModalPayment();
+  };
+
   const displayedMedia = showAll ? mediaData : mediaData.slice(0, 4);
 
   return (
@@ -168,7 +173,7 @@ const Contact = () => {
           <div className="p-8 md:w-3/4 flex flex-col gap-8">
             <h2 className="text-white">How can we help?</h2>
             <p className="text-white/90">Reach out to us via the following means:</p>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 ">
               <div onClick={openModal} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
                 <p className="text-white font-bold">Frequently Asked Questions</p>
                 <ArrowRight />
@@ -181,10 +186,27 @@ const Contact = () => {
                 <p className="text-white font-bold">Donate Today</p>
                 <ArrowRight />
               </div>
-              <div onClick={openModalPayment} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
-                <p className="text-white font-bold">Become Volunteer / Advocate</p>
+              <div onClick={() => handlePreFillMessage("I would love to partner with Upright Kids Foundation.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
+             <p className="text-white font-bold">Partner with us</p>
+             <ArrowRight />
+             </div>
+
+              <div onClick={() => handlePreFillMessage("I want to become a volunteer for Upright Kids Foundation.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
+              <p className="text-white font-bold">Become Volunteer</p>
+             <ArrowRight />
+             </div>
+
+              <div onClick={() => handlePreFillMessage("I want to advocate for Upright Kids Foundation's mission.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
+              <p className="text-white font-bold">Advocate</p>
+              <ArrowRight />
+               </div>
+
+               <div onClick={() => handlePreFillMessage("I want to fundraise for Upright Kids Foundation.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
+               <p className="text-white font-bold">Fundraise with us</p>
                 <ArrowRight />
-              </div>
+               </div>
+
+
             </div>
           </div>
           <div className="p-6 bg-[#0E2D58]">
@@ -280,14 +302,7 @@ const Contact = () => {
         </>
       </Modal>
 
-      <Modal isOpen={modalIsOpenPayment} onRequestClose={closeModalPayment} contentLabel="Modal" bodyOpenClassName="modal-open" style={customStyles}>
-        <>
-          <VolunteerForm />
-          <button onClick={closeModalPayment} className="absolute top-2 right-2 text-primary p-2 rounded-full bg-transparent hover:bg-gray-600 transition duration-200">
-            <CircleX />
-          </button>
-        </>
-      </Modal>
+
     </div>
   );
 };

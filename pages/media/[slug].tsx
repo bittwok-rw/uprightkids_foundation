@@ -89,9 +89,7 @@ const MediaPage = () => {
       {/* Description Section */}
       <div className="text-left w-[80%] space-y-8">
         {mediaItem.description.map((paragraph, index) => (
-          <p key={index} className="text-lg text-black">
-            {paragraph}
-          </p>
+          <p key={index} className="text-lg text-black" dangerouslySetInnerHTML={{ __html: paragraph }}></p>
         ))}
       </div>
 
@@ -106,12 +104,12 @@ const MediaPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayedMedia.map((story) => (
            <BlogCard
-           key={story.slug}
-           date={story.date || "No Date"}  // ✅ Ensure date is always a string
-           title={story.title}
-           slug={story.slug}
-           imageUrl={story.image[0]}
-         />
+             key={story.slug}
+             date={story.date || "No Date"}  // ✅ Ensure date is always a string
+             title={story.title}
+             slug={story.slug}
+             imageUrl={story.image[0]}
+           />
           ))}
         </div>
         <div className="flex justify-center my-8">

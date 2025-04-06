@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import GetInvolved from "@/components/GetInvolved";
 import DonationSection from "@/components/landing/DonationSection";
+import DonationSection2 from "@/components/landing/DonationSection2";
 
 const ProjectDetails = () => {
   const router = useRouter();
@@ -40,6 +41,26 @@ const ProjectDetails = () => {
     fetchProject();
   }, [slug]);
 
+  // Function to create safe HTML from rich text content
+  const createMarkup = (htmlContent: string) => {
+    return { __html: htmlContent };
+  };
+
+  // Function to truncate HTML content for other projects preview
+  const truncateHTML = (html: string, maxLength = 200) => {
+    // Remove HTML tags for length calculation
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    const textContent = div.textContent || div.innerText || "";
+    
+    if (textContent.length <= maxLength) {
+      return html;
+    }
+    
+    // Truncate the text content
+    return textContent.slice(0, maxLength) + "...";
+  };
+
   if (loading) return <h1 className="text-center text-xl font-bold">Loading...</h1>;
 
   if (error || !project) return <h1 className="text-center text-red-500">Project not found</h1>;
@@ -72,14 +93,17 @@ const ProjectDetails = () => {
         </div>
       </div>
 
-      {/* Description */}
+      {/* Description - Now with dangerouslySetInnerHTML to render HTML content */}
       <div className="flex flex-col gap-8 items-center justify-center">
-        <div className="w-[80%]">
-          <p className="text-gray-700 mb-8">{project.description}</p>
+        <div className="w-[80%] prose max-w-none">
+          <div 
+            className="rich-text-content text-gray-700"
+            dangerouslySetInnerHTML={createMarkup(project.description)}
+          />
         </div>
       </div>
 
-      <DonationSection />
+      <DonationSection2 />
 
       {/* More Projects Section */}
       <section className="bg-gray-100 flex justify-center py-12">
@@ -91,41 +115,45 @@ const ProjectDetails = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {otherProjects.map((project, index) => (
-              <div
-                key={index}
-                className="relative bg-black min-h-[40vh] text-white p-4 rounded-lg overflow-hidden shadow-lg"
-              >
+            {otherProjects.map((project, index) => {
+              // Create a plain text version of the description for the cards
+              const plainTextDesc = project.description.replace(/<[^>]*>?/gm, '');
+              const truncatedDesc = plainTextDesc.length > 200 
+                ? plainTextDesc.slice(0, 200) + "..."
+                : plainTextDesc;
+                
+              return (
                 <div
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${project.imageUrl})`,
-                    filter: "brightness(50%)",
-                  }}
-                ></div>
+                  key={index}
+                  className="relative bg-black min-h-[40vh] text-white p-4 rounded-lg overflow-hidden shadow-lg"
+                >
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(${project.imageUrl})`,
+                      filter: "brightness(50%)",
+                    }}
+                  ></div>
 
-                <div className="relative z-10 p-6 flex h-full flex-col justify-between">
-                  <div>
-                    <h3 className="text-xl font-bold uppercase mb-4">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm mb-6">
-                      {project.description.length > 200
-                        ? project.description.slice(0, 200) + "..."
-                        : project.description}
-                    </p>
-                  </div>
-                  <div>
-                    <button
-                      onClick={() => router.push(`/projects/${project.slug}`)}
-                      className="bg-white text-black px-4 py-2 rounded-md font-bold hover:bg-gray-200 transition"
-                    >
-                      Learn more
-                    </button>
+                  <div className="relative z-10 p-6 flex h-full flex-col justify-between">
+                    <div>
+                      <h3 className="text-xl font-bold uppercase mb-4">
+                        {project.title}
+                      </h3>
+                      <p className="text-sm mb-6">{truncatedDesc}</p>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => router.push(`/projects/${project.slug}`)}
+                        className="bg-white text-black px-4 py-2 rounded-md font-bold hover:bg-gray-200 transition"
+                      >
+                        Learn more
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

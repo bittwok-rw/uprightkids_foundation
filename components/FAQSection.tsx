@@ -11,12 +11,12 @@ const FAQSection = () => {
     },
     {
       question: "How can I join as a volunteer?",
-      answer: `Volunteering with Upright Kids Foundation is a rewarding way to make a difference. We offer both on-the-ground and remote volunteering opportunities. Whether you have skills in education, healthcare, fundraising, or administration, we’d love to have you on board. To apply, please send your resume and a brief statement of interest to 
+      answer: `Volunteering with Upright Kids Foundation is a rewarding way to make a difference. We offer both on-the-ground and remote volunteering opportunities. Whether you have skills in education, healthcare, fundraising, or administration, we'd love to have you on board. To apply, please send your resume and a brief statement of interest to 
         <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold">info@uprightkidsfoundation.org</a>. Our team will review your application and match you with a role that aligns with your skills and our needs.`,
     },
     {
       question: "Can I make a donation to a specific project?",
-      answer: `Yes, you can direct your donation to a specific project or program that resonates with you, such as our education initiatives, healthcare services, or vocational training programs. When making your donation, please specify the project you’d like to support, and we’ll ensure your funds are allocated accordingly.`,
+      answer: `Yes, you can direct your donation to a specific project or program that resonates with you, such as our education initiatives, healthcare services, or vocational training programs. When making your donation, please specify the project you'd like to support, and we'll ensure your funds are allocated accordingly.`,
     },
     {
       question: "How can I send or mail a check to Upright Kids Foundation?",
@@ -56,7 +56,7 @@ const FAQSection = () => {
     },
     {
       question: "How can I stay updated on the impact of my donation?",
-      answer: `We keep our donors informed through regular updates, newsletters, and impact reports. You’ll see how your contributions are transforming lives and empowering communities in the DRC.`,
+      answer: `We keep our donors informed through regular updates, newsletters, and impact reports. You'll see how your contributions are transforming lives and empowering communities in the DRC.`,
     },
     {
       question: "Who can I contact for more information?",
@@ -71,7 +71,7 @@ const FAQSection = () => {
       <div className="max-w-7xl p-8 mx-auto border shadow-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Questions Column */}
-          <div>
+          <div className="h-[600px] overflow-y-auto pr-4"> {/* Added height and scroll */}
             <h2 className="text-4xl font-bold text-primary mb-6">Frequently Asked Questions (FAQs)</h2>
             <div className="space-y-2">
               {faqs.map((faq, index) => (
@@ -96,7 +96,7 @@ const FAQSection = () => {
           </div>
 
           {/* Answer Column */}
-          <div>
+          <div className="h-[600px] overflow-y-auto"> {/* Added height and scroll */}
             <h2 className="text-4xl font-bold text-primary mb-6">Answer</h2>
             {activeQuestion ? (
               <div className="bg-accent p-6 text-black flex gap-2">

@@ -24,12 +24,20 @@ export default function DonationSection() {
     <section className="bg-primary-50 flex justify-center py-10 px-5">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 w-[90%] md:w-[80%]">
         {/* Left Text Section */}
-        <div className="lg:pr-10">
-        <h3 className="text-sm font-bold uppercase text-gray-700 mb-6">SUPPORT OUR WORK</h3>
-        <h2 className="text-3xl lg:text-4xl font-extrabold uppercase leading-tight text-gray-900">
-          Join our circle of hope to end marginalization in rural communities
-          </h2>
+        <div className="lg:pr-10 text-center">
+        <div className="text-center">
         </div>
+  <h3 className="text-sm font-bold uppercase text-gray-700 mb-6">SUPPORT OUR WORK</h3>
+  <h2 className="text-xl lg:text-2xl font-extrabold uppercase leading-tight text-gray-900 text-left max-w-xs mx-auto">
+  Join our circle of <br />
+  hope to end <br />
+  marginalization in <br />
+  rural communities
+</h2>
+
+
+</div>
+
 
         {/* Right Donation Cards Section */}
         <div className="lg:col-span-2 bg-[#0C2445] py-4 px-6 rounded-lg">

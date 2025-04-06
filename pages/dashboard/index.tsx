@@ -41,7 +41,7 @@ const Dashboard = () => {
         <header className="bg-white shadow p-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-blue-900">Dashboard</h1>
           <div className="flex items-center gap-4">
-            <span className="text-gray-600">Welcome, User</span>
+            <span className="text-gray-600">Welcome, Admin</span>
             <Button
               variant="ghost"
               className="text-red-600 hover:text-red-800 flex items-center gap-2"

@@ -51,14 +51,6 @@ export default function ProjectsSection() {
     fetchProjects();
   }, []);
 
-  // const projectDesc = [
-  //   "Education & School Support: We provide school materials, fees, and mentorship to help children thrive academically and reach their full potential.",
-  //   "Vocational Training for Empowerment: Through skill-building programs like sewing, we equip young girls with the tools to become self-sufficient and financially independent.",
-  //   "Health & Nutrition: Our healthcare initiatives ensure children receive medical care and nutritious food to stay healthy and strong.",
-  //   "Psychosocial Support: We offer trauma counseling and emotional support to children recovering from hardships, helping them build resilience.",
-  //   "Family Reintegration: We work to reunite children with their families and support them through counseling and resources to foster safe, loving homes.",
-  // ];
-
   return (
     <ContentSection
       smallHeading={{
@@ -77,23 +69,7 @@ export default function ProjectsSection() {
         {
           content: (
             <div className="flex flex-col gap-8">
-              <div className="flex flex-col space-y-8">
-                {/* {projectDesc.map((item, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="bg-primary rounded-full w-6 h-6 mt-1 flex items-center justify-center">
-                      <span className="text-white">✓</span>
-                    </div>
-                    <div className="flex flex-1 flex-col">
-                      <p className="text-black">
-                        <strong>{item.split(":")[0]}:</strong>
-                        {item.split(":").length > 1 && (
-                          <span className="ml-1">{item.split(":")[1]}</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))} */}
-              </div>
+              <div className="flex flex-col space-y-8"></div>
 
               {loading ? (
                 <p className="text-center text-gray-600">Loading projects...</p>
@@ -111,11 +87,15 @@ export default function ProjectsSection() {
                             <CardTitle className="!text-3xl !font-semibold text-black group-hover:text-white transition-colors">
                               {project.title}
                             </CardTitle>
-                            <CardDescription className="!text-base !text-black group-hover:!text-white">
-                              {project.description.length > 200
-                                ? project.description.slice(0, 200) + "..."
-                                : project.description}
-                            </CardDescription>
+                            <CardDescription
+                              className="!text-base !text-black group-hover:!text-white"
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  project.description.length > 200
+                                    ? project.description.slice(0, 200) + "..."
+                                    : project.description,
+                              }}
+                            ></CardDescription>
                           </CardHeader>
                           <CardFooter className="p-0">
                             <Button

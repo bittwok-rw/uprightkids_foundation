@@ -8,7 +8,7 @@ import parse from "html-react-parser";
 import { sanitizeHtml } from "@/utils/sanitizeHtml";
 
 export interface ContentSectionProps {
-	smallHeading?: {
+	smallHeading?: { 
 		text: string;
 		showLine?: boolean;
 		linePosition?: "left" | "right";
