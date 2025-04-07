@@ -12,20 +12,22 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const FundamentalValuesCarousel = () => {
   return (
     <div className="py-8 px-4 md:px-8 flex justify-center">
-      <div className="py-8 px-4 md:px-8 w-[80%] flex flex-col gap-8 items-center">
-        <div className="w-1/2 px-8 bg-gradient-to-b from-[#E5EBF8] rounded-md to-transparent mb-6">
+      <div className="py-8 px-4 md:px-8 md:w-[80%] flex flex-col gap-8 items-center">
+        <div className="md:w-1/2 px-8 bg-gradient-to-b from-[#E5EBF8] rounded-md to-transparent mb-6">
           <h2 className="font-bold text-center">Fundamental Values</h2>
         </div>
         <div className="relative w-full grid overflow-hidden">
-          <div className="mx-12 overflow-hidden">
+          <div className="md:mx-12 overflow-hidden">
             <Swiper
               spaceBetween={30}
               slidesPerView={3}
               pagination
               breakpoints={{
-                640: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 3 },
+                200: { slidesPerView: 1 }, // Extra small screens
+                480: { slidesPerView: 1 }, // Extra small screens
+                640: { slidesPerView: 1 }, // Small screens
+                768: { slidesPerView: 2 }, // Medium screens
+                1024: { slidesPerView: 3 }, // Large screens
               }}
               loop={true}
               navigation={{
@@ -45,7 +47,7 @@ const FundamentalValuesCarousel = () => {
                 return (
                   <SwiperSlide key={index}>
                     <div
-                      className={`bg-[#E5F6F1] ${borderColor} border-t-4 p-6 h-full flex flex-col justify-between items-stretch rounded-md shadow-md text-center`}
+                      className={`bg-[#E5F6F1] ${borderColor} border-t-4 p-4 h-full flex flex-col justify-between items-stretch rounded-md shadow-md text-center`}
                     >
                       <div>
                         <h3 className="text-2xl font-bold text-black mb-4">
