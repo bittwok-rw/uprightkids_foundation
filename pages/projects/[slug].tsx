@@ -87,15 +87,30 @@ const ProjectDetails = () => {
       </div>
 
       {/* Description - Now with dangerouslySetInnerHTML to render HTML content */}
-      <div className="flex flex-col gap-8 items-center justify-center">
-        <div className="w-[80%] prose max-w-none">
-          <div 
-            className="rich-text-content text-gray-700"
-            dangerouslySetInnerHTML={createMarkup(project.description)}
-          />
-        </div>
-      </div>
-
+      <div className="w-[80%] mx-auto space-y-6">
+  <div 
+    className="text-lg text-black max-w-full"
+    dangerouslySetInnerHTML={{ 
+      __html: project.description
+        .replace(
+          /<img([^>]*)>/g, 
+          '<div class="flex justify-center my-4"><img$1 class="w-full h-auto rounded-lg shadow-md block" style="max-width: 100%;"></div>'
+        )
+        .replace(
+          /<p([^>]*)>/g, 
+          '<p$1 class="text-left m-0 p-0 w-full">'
+        )
+        .replace(
+          /<ul([^>]*)>/g,
+          '<ul$1 class="list-disc pl-6 m-0 p-0 w-full">'
+        )
+        .replace(
+          /<ol([^>]*)>/g,
+          '<ol$1 class="list-decimal pl-6 m-0 p-0 w-full">'
+        )
+    }}
+  />
+</div>
       <DonationSection2 />
 
       {/* More Projects Section */}

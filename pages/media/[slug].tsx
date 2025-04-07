@@ -88,11 +88,19 @@ const MediaPage = () => {
       </div>
 
       {/* Description Section */}
-      <div className="text-left w-[80%] space-y-8">
-        {mediaItem.description.map((paragraph, index) => (
-          <p key={index} className="text-lg text-black" dangerouslySetInnerHTML={{ __html: paragraph }}></p>
-        ))}
-      </div>
+      <div className="w-[80%] mx-auto space-y-6">
+  {mediaItem.description.map((paragraph, index) => (
+    <div 
+      key={index}
+      className="text-lg text-black max-w-full"
+      dangerouslySetInnerHTML={{ 
+        __html: paragraph
+          .replace(/<img([^>]*)>/g, '<div class="flex justify-center my-4"><img$1 class="w-full h-auto rounded-lg shadow-md block" style="max-width: 100%;"></div>')
+          .replace(/<p([^>]*)>/g, '<p$1 class="text-left m-0 p-0 w-full">')
+      }}
+    />
+  ))}
+</div>
 
       {/* Other Media Section */}
       <section className="w-[80%] mx-auto py-10 mt-10">

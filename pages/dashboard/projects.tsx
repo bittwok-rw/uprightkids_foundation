@@ -290,12 +290,12 @@ export default function AddProjectPage() {
                       <td className="py-4 px-4">
                         {project.imageUrl ? (
                           <div className="w-16 h-16 rounded-md overflow-hidden bg-gray-100 border">
-                            <Image 
-                              src={project.imageUrl} 
-                              alt={project.title} 
-                              className="w-full h-full object-cover" 
-                              onError={handleImageError}
-                            />
+                                <Image
+                                  src="https://i.postimg.cc/Dyzh3pFX/MG-6720.png"
+                                   alt="My Image"
+                                  width={500} // specify the width of the image
+                                  height={300} // specify the height of the image
+                                 />
                           </div>
                         ) : (
                           <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gray-100 text-gray-400 text-xs">

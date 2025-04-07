@@ -6,8 +6,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "ihaha.rw",
-        pathname: "/wp-content/uploads/**",
+        hostname: "i.postimg.cc",
+        pathname: "/Dyzh3pFX/MG-6720.png",
       },
     ],
   },
