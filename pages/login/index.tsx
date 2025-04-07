@@ -18,7 +18,7 @@ export default function LoginPage() {
     
     // Simulate API call with timeout
     setTimeout(() => {
-      if (username === "Admin" && password === "Admin@123") {
+      if (username === "info@uprightkidsfoundation.org" && password === "Up@right.25") {
         document.cookie = "authToken=validToken; path=/";
         localStorage.setItem("authToken", "validToken");
         router.push("/dashboard");
