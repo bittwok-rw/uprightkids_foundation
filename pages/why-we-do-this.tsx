@@ -128,10 +128,7 @@ const WhatWeDo = () => {
         <div className="w-full px-4 sm:px-6 md:w-[90%] lg:w-[80%] xl:w-[80%] 2xl:w-[70%] flex justify-end">
         <div className="w-full md:w-1/2 bg-black flex flex-col gap-8 md:gap-16 bg-opacity-80 my-8 md:my-16 p-4 sm:p-6 md:p-8">
         <p className="font-bold text-xl md:text-2xl lg:text-3xl">
-              “We would like to extend our deepest gratitude to our best friends
-              and families, specially Famille HARRIET ANDRIESSEN, Dr WILLEM
-              LAMMERS, Famille ESTHER BORRA & ERNST AEBI and Peace Walker
-              (Carolyn), who have stood with us in this journey.”
+        “We would like to extend our deepest gratitude to our best friends and families, specially Famille HARRIET ANDRIESSEN, Dr WILLEM LAMMERS, Famille ESTHER BORRA & ERNST AEBI, Susie Gessey and Global Community, Edwin Fietsverkoop, Carolyn Peters, Sarah Sheldon, Agnija Kazusha and Peace Walker (Carolyn), who have stood with us in this journey.”
             </p>
             <p className="text-2xl">
               School materials have been provided, kids have fed, and homeless
