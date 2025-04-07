@@ -49,11 +49,6 @@ const ProjectDetails = () => {
     fetchProject();
   }, [slug]);
 
-  // Function to create safe HTML from rich text content
-  const createMarkup = (htmlContent: string) => {
-    return { __html: htmlContent };
-  };
-
   if (loading) return <h1 className="text-center text-xl font-bold">Loading...</h1>;
 
   if (error || !project) return <h1 className="text-center text-red-500">Project not found</h1>;
@@ -88,29 +83,29 @@ const ProjectDetails = () => {
 
       {/* Description - Now with dangerouslySetInnerHTML to render HTML content */}
       <div className="w-[80%] mx-auto space-y-6">
-  <div 
-    className="text-lg text-black max-w-full"
-    dangerouslySetInnerHTML={{ 
-      __html: project.description
-        .replace(
-          /<img([^>]*)>/g, 
-          '<div class="flex justify-center my-4"><img$1 class="w-full h-auto rounded-lg shadow-md block" style="max-width: 100%;"></div>'
-        )
-        .replace(
-          /<p([^>]*)>/g, 
-          '<p$1 class="text-left m-0 p-0 w-full">'
-        )
-        .replace(
-          /<ul([^>]*)>/g,
-          '<ul$1 class="list-disc pl-6 m-0 p-0 w-full">'
-        )
-        .replace(
-          /<ol([^>]*)>/g,
-          '<ol$1 class="list-decimal pl-6 m-0 p-0 w-full">'
-        )
-    }}
-  />
-</div>
+        <div 
+          className="text-lg text-black max-w-full"
+          dangerouslySetInnerHTML={{ 
+            __html: project.description
+              .replace(
+                /<img([^>]*)>/g, 
+                '<div class="flex justify-center my-4"><img$1 class="w-full h-auto rounded-lg shadow-md block" style="max-width: 100%;"></div>'
+              )
+              .replace(
+                /<p([^>]*)>/g, 
+                '<p$1 class="text-left m-0 p-0 w-full">'
+              )
+              .replace(
+                /<ul([^>]*)>/g,
+                '<ul$1 class="list-disc pl-6 m-0 p-0 w-full">'
+              )
+              .replace(
+                /<ol([^>]*)>/g,
+                '<ol$1 class="list-decimal pl-6 m-0 p-0 w-full">'
+              )
+          }}
+        />
+      </div>
       <DonationSection2 />
 
       {/* More Projects Section */}
