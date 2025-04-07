@@ -171,12 +171,12 @@ const MeetTeamCard = () => {
 
       <div className="flex flex-col md:flex-row my-6 md:my-8 py-4 border-2 border-[#e5ebf8d9] bg-gradient-to-l from-[#033AB924] to-[#E5EBF833] scroll-mt-[200px] w-full" id="locations">
         <div className="mx-auto md:mx-8 lg:mx-12 mb-4 md:mb-0 flex justify-center">
-          <Image
-            src="https://res.cloudinary.com/ds04ivdrj/image/upload/v1738344105/locationIcon_qa58bu.svg"
-            alt="Location"
-            width={150}
-            height={150}
-            className="w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[200px] lg:h-[200px]"
+        <Image
+           src="https://res.cloudinary.com/ds04ivdrj/image/upload/v1738344105/locationIcon_qa58bu.svg"
+           alt="Location"
+           width={80}  
+           height={80} 
+          className="w-[60px] h-[60px] md:w-[80px] md:h-[80px] lg:w-[100px] lg:h-[100px]"
           />
         </div>
         <div className="px-4 md:px-0">
