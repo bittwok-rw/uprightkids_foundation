@@ -289,20 +289,20 @@ export default function AddProjectPage() {
                       </td>
                       <td className="py-4 px-4">
                       {project.imageUrl ? (
-  <div className="w-16 h-16 rounded-md overflow-hidden bg-gray-100 border">
-        <Image
-          src="https://i.postimg.cc/Dyzh3pFX/MG-6720.png"
-          alt="My Image"
-          width={500}
-          height={300}
-          onError={handleImageError}
-         />
-  </div>
-) : (
+                  <div className="w-16 h-16 rounded-md overflow-hidden bg-gray-100 border">
+                  <Image
+                     src="https://i.postimg.cc/Dyzh3pFX/MG-6720.png"
+                      alt="My Image"
+                       width={500}
+                       height={300}
+                       onError={handleImageError}
+                              />
+                          </div>
+                            ) : (
   <div className="w-16 h-16 flex items-center justify-center rounded-md bg-gray-100 text-gray-400 text-xs">
     No Image
   </div>
-)}
+                          )}
                       </td>
                       <td className="py-4 px-4 relative">
                         <button
