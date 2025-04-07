@@ -8,39 +8,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DonateForm from "./DonateForm";
 
 export function DonationTabs() {
   const [showForm, setShowForm] = useState(false);
   const [selectedTab, setSelectedTab] = useState("one");
-  const [selectedAmount, setSelectedAmount] = useState<number | "custom" | null>(null);
-  const [customAmount, setCustomAmount] = useState<number | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<
+    number | "custom" | null
+  >(null);
+  // const [customAmount, setCustomAmount] = useState<number | "">(0);
 
   const handleAmountSelection = (amount: number | "custom") => {
     setSelectedAmount(amount);
-    if (amount !== "custom") {
-      setCustomAmount(null); // Clear custom amount when switching to a preset
-    }
-  };
-
-  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCustomAmount(value ? parseFloat(value) : null);
-  };
-
-  // Helper function to get the amount to pass to DonateForm
-  const getDonationAmount = (): number | "custom" => {
-    if (selectedAmount === "custom") {
-      return customAmount !== null ? customAmount : "custom";
-    }
-    return selectedAmount !== null ? selectedAmount : 0; // Default to 0 if nothing selected
   };
 
   return (
-    <Tabs defaultValue="one" onValueChange={(value) => { setSelectedTab(value); setShowForm(false); }}>
+    <Tabs
+      defaultValue="one"
+      onValueChange={(value) => {
+        setSelectedTab(value);
+        setShowForm(false);
+      }}
+    >
       <TabsList className="grid w-full md:grid-cols-2 gap-4 overflow-auto">
         <TabsTrigger value="one">One-Time Donation</TabsTrigger>
         <TabsTrigger value="monthly">Monthly Donation</TabsTrigger>
@@ -63,58 +53,42 @@ export function DonationTabs() {
                 {[20, 50, 100, 200, 500, 1000].map((amount) => (
                   <button
                     key={amount}
-                    className={`p-2 rounded-lg border ${selectedAmount === amount ? "bg-accent text-black" : "bg-white text-black"}`}
+                    className={`p-2 rounded-lg border ${
+                      selectedAmount === amount
+                        ? "bg-accent text-black"
+                        : "bg-white text-black"
+                    }`}
                     onClick={() => handleAmountSelection(amount)}
                   >
-                    ${amount}{selectedTab === "monthly" && "/month"}
+                    ${amount}
+                    {selectedTab === "monthly" && "/month"}
                   </button>
                 ))}
-                <button
-                  className={`p-2 rounded-lg border ${selectedAmount === "custom" ? "bg-accent text-black" : "bg-white text-black"}`}
-                  onClick={() => handleAmountSelection("custom")}
-                >
-                  Custom
-                </button>
               </div>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            {selectedAmount === "custom" && (
-              <div>
-                <Label htmlFor="custom-amount">Enter custom amount (USD)</Label>
-                <Input
-                  id="custom-amount"
-                  type="number"
-                  placeholder="Enter amount"
-                  value={customAmount || ""}
-                  onChange={handleCustomAmountChange}
-                  className="text-black bg-white"
-                />
-              </div>
-            )}
-
-            {/* Display selected amount */}
             {selectedAmount && selectedAmount !== "custom" && (
               <div className="mt-4 text-white">
-                <p><strong>Selected Amount: </strong>${selectedAmount}{selectedTab === "monthly" && "/month"}</p>
-              </div>
-            )}
-            {selectedAmount === "custom" && customAmount !== null && (
-              <div className="mt-4 text-white">
-                <p><strong>Custom Amount: </strong>${customAmount}</p>
+                <p>
+                  <strong>Selected Amount: </strong>${selectedAmount}
+                  {selectedTab === "monthly" && "/month"}
+                </p>
               </div>
             )}
           </CardContent>
           <CardFooter>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="w-full rounded-full bg-accent text-black p-3"
-              disabled={!selectedAmount || (selectedAmount === "custom" && customAmount === null)}
-            >
-              Donate Now
-            </Button>
+            {!showForm && (
+              <Button
+                onClick={() => setShowForm(true)}
+                className="w-full rounded-full bg-accent hover:bg-accent/90 hover:text-white text-black p-3"
+                disabled={!selectedAmount}
+              >
+                Donate Now
+              </Button>
+            )}
           </CardFooter>
-          {showForm && <DonateForm selectedAmount={getDonationAmount()} />}
+          {showForm && <DonateForm selectedAmount={selectedAmount} />}
         </Card>
       </TabsContent>
     </Tabs>

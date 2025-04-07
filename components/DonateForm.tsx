@@ -1,22 +1,47 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { Checkbox } from "@/components/ui/checkbox";  // Adjust path as needed
-import Image from "next/image";
+import { Checkbox } from "@/components/ui/checkbox"; // Adjust path as needed
+import { loadStripe } from "@stripe/stripe-js";
+import { Button } from "./ui/button";
 
-interface DonateFormProps {
-  selectedAmount: number | "custom";
-}
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KY!
+);
 
-const DonateForm = ({ selectedAmount }: DonateFormProps) => {
+const DonateForm = ({ selectedAmount }: any) => {
   const [step, setStep] = useState<number>(1); // 1: Personal, 2: Review, 3: Payment
   const [loading, setLoading] = useState<boolean>(false);
-  const [paymentMethod, setPaymentMethod] = useState<"Card" | "PayPal" | "G Pay">("Card");
+  const [paymentMethod, setPaymentMethod] = useState<
+    "Card" | "PayPal" | "G Pay"
+  >("Card");
+
+  // Schema for Step 1 (Personal Details)
+  const formSchemaStep1 = z.object({
+    title: z.enum(["Mr", "Ms", "Mrs", "Dr", "Other"]),
+    firstName: z.string().min(2, "First name is required").trim(),
+    lastName: z.string().min(2, "Last name is required").trim(),
+    email: z.string().email("Invalid email address").trim(),
+    phoneNumber: z.string().min(10, "Phone number is too short").trim(),
+    receiveNewsletter: z.boolean(),
+    agreeToTerms: z
+      .boolean()
+      .refine((val) => val, "You must agree to terms and conditions"),
+  });
 
   // Schema for Step 3 (Payment Details)
   const formSchema = z.object({
@@ -27,18 +52,12 @@ const DonateForm = ({ selectedAmount }: DonateFormProps) => {
     email: z.string().email("Invalid email address").trim(),
     phoneNumber: z.string().min(10, "Phone number is too short").trim(),
     receiveNewsletter: z.boolean(),
-    agreeToTerms: z.boolean().refine((val) => val, "You must agree to terms and conditions"),
-
-    // Payment details schema (Step 3)
-    cardNumber: z.string().min(16, "Card number must be 16 digits").max(16).optional(),
-    cardName: z.string().min(2, "Cardholder name is required").optional(),
-    expiryDate: z.string().regex(/^(0[1-9]|1[0-2])\/?([0-9]{2})$/, "Invalid expiry date").optional(),
-    securityCode: z.string().min(3, "Security code must be 3-4 digits").max(4).optional(),
+    agreeToTerms: z
+      .boolean()
+      .refine((val) => val, "You must agree to terms and conditions"),
   });
 
-  type FormValues = z.infer<typeof formSchema>;
-
-  const form = useForm<FormValues>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
     defaultValues: {
@@ -49,38 +68,76 @@ const DonateForm = ({ selectedAmount }: DonateFormProps) => {
       phoneNumber: "",
       receiveNewsletter: false,
       agreeToTerms: false,
-      cardNumber: "",
-      cardName: "",
-      expiryDate: "",
-      securityCode: "",
     },
   });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const stripe = await stripePromise;
 
-  const onSubmit = async (values: FormValues) => {
+    if (!stripe) {
+      console.error("Stripe failed to initialize.");
+      alert("Failed to initialize Stripe. Please try again later.");
+      return;
+    }
+
     setLoading(true);
     try {
-      await axios.post('/api/donate', {
-        ...values,
-        amount: selectedAmount,  // Pass the selected amount
-        paymentMethod,
+      const response = await fetch("/api/checkout_sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          line_items: [
+            {
+              price_data: {
+                currency: "usd",
+                product_data: {
+                  name: `${values.firstName} ${values.lastName} - Donation`,
+                },
+                unit_amount: selectedAmount * 100,
+              },
+              quantity: 1,
+            },
+          ],
+        }),
       });
-      toast.success("Donation submitted successfully!");
-      form.reset();
-    } catch {
-      toast.error("Failed to submit donation. Please try again.");
+
+      const { id } = await response.json();
+
+      // Redirect to Stripe Checkout
+      const { error } = await stripe.redirectToCheckout({ sessionId: id });
+
+      if (error) {
+        console.error("Error:", error);
+      }
+
+      if (error) {
+        console.error("Error:", error);
+        toast.error("Error:" + error);
+      } else {
+        // Send the token to your server to handle the charge
+        await axios.post("/api/donate", {
+          ...values,
+          amount: selectedAmount,
+          paymentMethod,
+        });
+        toast.success("Donation submitted successfully!");
+        form.reset();
+      }
+    } catch (error) {
+      toast.error("Failed to submit donation. Please try again." + error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
-    <div className="bg-primary p-8 flex flex-col gap-4 text-white overflow-y-auto">
-      {step === 1 && (
-        <>
-          <p className="font-bold">Please Fill your personal details</p>
-          <Form {...form}>
-            <form className="space-y-6">
+    <Form {...form}>
+      <div className="bg-primary p-8 flex flex-col gap-4 text-white overflow-y-auto">
+  
+          <>
+            <p className="font-bold">Please Fill your personal details</p>
+            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
               {/* Personal details fields */}
               <FormField
                 control={form.control}
@@ -105,7 +162,7 @@ const DonateForm = ({ selectedAmount }: DonateFormProps) => {
                 )}
               />
 
-               <FormField
+              <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
@@ -179,7 +236,6 @@ const DonateForm = ({ selectedAmount }: DonateFormProps) => {
                 )}
               />
 
-
               <FormField
                 control={form.control}
                 name="receiveNewsletter"
@@ -196,9 +252,8 @@ const DonateForm = ({ selectedAmount }: DonateFormProps) => {
                   </FormItem>
                 )}
               />
-             
 
-             <FormField
+              <FormField
                 control={form.control}
                 name="agreeToTerms"
                 render={({ field }) => (
@@ -214,215 +269,25 @@ const DonateForm = ({ selectedAmount }: DonateFormProps) => {
                     <FormMessage />
                   </FormItem>
                 )}
+                rules={{
+                  required: "You must agree to the terms and conditions",
+                }} // Validation for checkbox
               />
-              {/* Other personal fields (firstName, lastName, email, phoneNumber) */}
-              {/* ... */}
 
-              <button
+              <Button
                 type="button"
-                onClick={() => setStep(2)}
-                className="bg-accent text-black border border-white px-4 py-2 rounded"
-              >
-                Next
-              </button>
-            </form>
-          </Form>
-        </>
-      )}
-
-      {step === 2 && (
-        <>
-          <p className="font-bold">Your Personal Info</p>
-          <div className="bg-gray-200 text-black p-4 rounded max-h-40 overflow-y-auto mb-4">
-            {/* Display personal info */}
-            <p><strong>Title:</strong> {form.watch("title")}</p>
-            <p><strong>First Name:</strong> {form.watch("firstName")}</p>
-            <p><strong>Last Name:</strong> {form.watch("lastName")}</p>
-            <p><strong>Email:</strong> {form.watch("email")}</p>
-            <p><strong>Phone Number:</strong> {form.watch("phoneNumber")}</p>
-          </div>
-          <p className="font-bold">Selected Donation Amount: ${selectedAmount}</p>
-
-          <button
-            type="button"
-            onClick={() => setStep(3)}
-            className="bg-accent text-black px-4 py-2 rounded"
-          >
-            Donate NOW
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setStep(1)}
-            className="bg-gray-400 text-white px-4 py-2 rounded mt-2"
-          >
-            Back
-          </button>
-        </>
-      )}
-
-      {step === 3 && (
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4">
-              <h3 className="font-bold">Donate By *</h3>
-              <div className="flex gap-4">
-              <div className="flex space-x-4">
-        <div
-          onClick={() => setPaymentMethod("PayPal")}
-          className={`flex-1 flex items-center justify-center py-3 rounded-lg shadow-md cursor-pointer ${
-            paymentMethod === "PayPal" 
-              ? "bg-blue-600 text-white" 
-              : "bg-white text-gray-700 border border-gray-300"
-          }`}
-        >
-          <Image 
-            src="/images/image.png" 
-            alt="PayPal" 
-            className="mr-2 w-8 h-8"
-          />
-          PayPal
-        </div>
-        <div
-          onClick={() => setPaymentMethod("Card")}
-          className={`flex-1 flex items-center justify-center py-3 rounded-lg shadow-md cursor-pointer ${
-            paymentMethod === "Card" 
-              ? "bg-blue-600 text-white" 
-              : "bg-white text-gray-700 border border-gray-300"
-          }`}
-        >
-          <Image
-            src="/images/download.png" 
-            alt="Card" 
-            className="mr-2 w-8 h-8"
-          />
-          Card
-        </div>
-      </div>
-      </div>
-      </div>
-
-
-            {paymentMethod === "Card" && (
-              <>
-                <h3 className="font-bold">Donation Details</h3>
-                <p className="text-sm">*Fill the required fields</p>
-
-                <FormField
-                  control={form.control}
-                  name="cardNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Card Number *</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="text-black bg-white"
-                          placeholder="Enter Card Number"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="cardName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cardholder&apos;s Name *</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="text-black bg-white"
-                          placeholder="Enter your Full Name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="expiryDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Expiry Date *</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="text-black bg-white"
-                            placeholder="MM / YY"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="securityCode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Security Code *</FormLabel>
-                        <FormControl>
-                          <Input
-                            className="text-black bg-white"
-                            placeholder="CVV"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </>
-            )}
-
-            <div className="flex gap-4">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="bg-gray-400 text-white px-4 py-2 rounded"
-              >
-                Back
-              </button>
-
-              <button
-                type="submit"
-                className="bg-accent text-black px-4 py-2 rounded"
+                onClick={form.handleSubmit(onSubmit)}
                 disabled={loading}
+                className="bg-accent hover:bg-accent/90 text-black px-4 py-2 rounded"
               >
-                {loading ? "Processing..." : "Submit Your Donation"}
-              </button>
-            </div>
+                Donate Now
+              </Button>
+            </form>
+          </>
+        
 
-            <div
-          onClick={() => setPaymentMethod("G Pay")}
-          className={`flex-1 flex items-center justify-center py-3 rounded-lg shadow-md cursor-pointer ${
-            paymentMethod === "G Pay" 
-              ? "bg-blue-600 text-white" 
-              : "bg-white text-gray-700 border border-gray-300"
-          }`}
-        >
-      <Image 
-        src="/images/icons8-google-48.png" 
-        alt="Google Pay" 
-        className="w-6 h-6"
-      />
-      <span>G Pay</span>
-    </div>
-
-          </form>
-        </Form>
-      )}
-    </div>
-    
+      </div>
+    </Form>
   );
 };
 
