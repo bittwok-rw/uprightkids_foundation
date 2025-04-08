@@ -23,6 +23,7 @@ const MediaCarousel = () => {
   const [mediaData, setMediaData] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   useEffect(() => {
     const fetchMediaData = async () => {
@@ -41,6 +42,16 @@ const MediaCarousel = () => {
     };
 
     fetchMediaData();
+
+    // Handle responsive behavior
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
   }, []);
 
   const handlePrev = () => {
@@ -53,6 +64,15 @@ const MediaCarousel = () => {
     if (swiperRef.current) {
       swiperRef.current.swiper.slideNext();
     }
+  };
+
+  // Calculate gap size based on window width
+  const getNavigationGap = () => {
+    if (windowWidth < 480) return 'gap-16'; // Smallest screens
+    if (windowWidth < 640) return 'gap-24'; // Extra small screens
+    if (windowWidth < 768) return 'gap-32'; // Small screens
+    if (windowWidth < 1024) return 'gap-48'; // Medium screens
+    return 'gap-80'; // Large screens and above (20rem)
   };
 
   if (loading) return <div className="w-full h-[300px] flex items-center justify-center">Loading...</div>;
@@ -81,9 +101,11 @@ const MediaCarousel = () => {
         modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
         className="w-full"
         breakpoints={{
-          640: { slidesPerView: 2, spaceBetween: 30 },
-          768: { slidesPerView: 3, spaceBetween: 40 },
-          1024: { slidesPerView: 3, spaceBetween: 50 },
+          200: { slidesPerView: 1, spaceBetween: 20 }, // Extra small screens
+          480: { slidesPerView: 1, spaceBetween: 30 }, // Extra small screens
+          640: { slidesPerView: 1, spaceBetween: 30 }, // Small screens
+          768: { slidesPerView: 2, spaceBetween: 40 }, // Medium screens
+          1024: { slidesPerView: 3, spaceBetween: 50 }, // Large screens
         }}
       >
         {mediaData.map((item) => (
@@ -92,20 +114,20 @@ const MediaCarousel = () => {
               onClick={() => {
                 window.location.href = `/media/${item.slug}`;
               }}
-              className="relative w-full h-[300px] sm:h-[400px] overflow-hidden rounded-lg transition-transform duration-500 ease-in-out hover:scale-105"
+              className="relative w-full h-[250px] xs:h-[280px] sm:h-[320px] md:h-[360px] lg:h-[400px] overflow-hidden rounded-lg transition-transform duration-500 ease-in-out hover:scale-105"
             >
               <img
                 src={item.image[0] || "/images/projects/sewing.png"} // Fallback image
                 alt={item.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 z-10 bg-black bg-opacity-10 hover:bg-opacity-50 flex items-end justify-between p-4">
-                <h3 className="text-white text-sm sm:text-lg font-bold">
+              <div className="absolute inset-0 z-10 bg-black bg-opacity-10 hover:bg-opacity-50 flex items-end justify-between p-2 sm:p-4">
+                <h3 className="text-white text-xs xs:text-sm sm:text-base md:text-lg font-bold line-clamp-2">
                   {item.title}
                 </h3>
               </div>
-              <div className="absolute top-0 z-10 p-4">
-                <h3 className="text-white text-sm sm:text-lg font-bold">
+              <div className="absolute top-0 z-10 p-2 sm:p-4">
+                <h3 className="text-white text-xs xs:text-sm sm:text-base font-bold">
                   {new Date(item.date).toLocaleDateString()} {/* Formatted date */}
                 </h3>
               </div>
@@ -114,20 +136,22 @@ const MediaCarousel = () => {
         ))}
       </Swiper>
 
-      {/* Bottom Navigation Arrows */}
-      <div className="absolute bottom-[-50px] left-1/2 transform -translate-x-1/2 flex flex-row items-center justify-center gap-[20.5rem] z-20">
+      {/* Bottom Navigation Arrows - Responsive gap */}
+      <div className={`absolute bottom-[-50px] left-1/2 transform -translate-x-1/2 flex flex-row items-center justify-center ${getNavigationGap()} z-20`}>
         <button 
           onClick={handlePrev}
-          className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-500 hover:bg-gray-400 transition-colors"
+          className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-gray-500 hover:bg-gray-400 transition-colors"
+          aria-label="Previous slide"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            width="24" 
-            height="24" 
+            width="16" 
+            height="16"
+            className="sm:w-5 sm:h-5 md:w-6 md:h-6" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="currentColor" 
-            strokeWidth="1.5" 
+            strokeWidth="2" 
             strokeLinecap="round" 
             strokeLinejoin="round"
           >
@@ -136,16 +160,18 @@ const MediaCarousel = () => {
         </button>
         <button 
           onClick={handleNext}
-          className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-500 hover:bg-gray-400 transition-colors"
+          className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-gray-500 hover:bg-gray-400 transition-colors"
+          aria-label="Next slide"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            width="24" 
-            height="24" 
+            width="16" 
+            height="16"
+            className="sm:w-5 sm:h-5 md:w-6 md:h-6" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="currentColor" 
-            strokeWidth="1.5" 
+            strokeWidth="2" 
             strokeLinecap="round" 
             strokeLinejoin="round"
           >
