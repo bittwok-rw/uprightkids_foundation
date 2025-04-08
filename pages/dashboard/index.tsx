@@ -6,6 +6,9 @@ import { FaProjectDiagram, FaUsers, FaImages, FaSignOutAlt } from "react-icons/f
 import MediaManagement from "./media";
 import ProjectManagement from "./projects";
 import TeamManagement from "./team";
+import SubscribersList from "./subscruber";
+
+
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("projects");
@@ -20,6 +23,7 @@ const Dashboard = () => {
             { id: "media", label: "Media Management", icon: <FaImages /> },
             { id: "projects", label: "Project Management", icon: <FaProjectDiagram /> },
             { id: "team", label: "Team Management", icon: <FaUsers /> },
+            { id: "subscruber", label: "All subscrubers", icon: <FaUsers /> },
           ].map(({ id, label, icon }) => (
             <Button
               key={id}
@@ -63,6 +67,7 @@ const Dashboard = () => {
               {activeSection === "media" && <MediaManagement />}
               {activeSection === "projects" && <ProjectManagement />}
               {activeSection === "team" && <TeamManagement />}
+              {activeSection === "subscruber" && <SubscribersList />}
             </CardContent>
           </Card>
         </main>
