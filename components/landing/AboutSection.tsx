@@ -12,7 +12,7 @@ export default function AboutSection() {
 				linePosition: "right",
 			}}
 			mainHeading={{
-				content: `WE EMPOWER CHILDREN <span className="hidden lg:inline"><br /></span> OUT OF POVERTY`,
+				content: `CHILDREN HAVE THE RIGHT TO A <span className="hidden lg:inline"><br /></span> SUSTAINABLE FUTURE`,
 				isHtml: true,
 			}}
 			paragraphs={[
