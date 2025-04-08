@@ -12,43 +12,43 @@ import GetInvolved from "@/components/GetInvolved";
 const Donation = () => {
   return (
     <div>
-      <div className="w-full flex min-h-[70vh] py-8 justify-start bg-[#E5EBF8] overflow-hidden items-center">
-        <div className="flex justify-center">
-          <div className="grid md:grid-cols-2 w-[80%] gap-16 place-content-center">
-            <div className="font-bold  rounded justify-between items-center capitalize text-primary text-lg">
-              <div className="flex items-start py-4">
-                <div className="w-[72px] md:mr-2  my-4 border-t-2 border-primary">
-                  {""}
-                </div>
-                <div>
-                  <h3 className="text-primary text-[20px] font-semibold">
-                    DONATE
-                  </h3>
-                  <div className="my-4 flex flex-col gap-8">
-                    <h2 className="text-5xl leading-[3.5rem]">
-                      JOIN OUR CIRCLE OF HOPE TO END MARGINALIZATION
-                    </h2>
-                    <p className="text-black lowercase">
-                     <span className="text-black uppercase">A</span>t Upright Kids Foundation, we believe that every child
-                      deserves the opportunity to thrive. <span className="text-black uppercase">T</span>ogether, we can break
-                      the cycle of poverty, end marginalization, and build
-                      brighter futures for vulnerable children and families in
-                      the Democratic Republic of Congo. <span className="text-black uppercase">B</span>y donating to Upright
-                      Kids Foundation, you’re joining a global community
-                      committed to making a difference.
-                    </p>
-                    <div>
-                      <Button  onClick={() => {
-                window.location.href = `/donation#donate`;
-              }} className="bg-primary hover:text-white text-white">
-                        Donate Now
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+    <div className="w-full flex min-h-[60vh] sm:min-h-[65vh] md:min-h-[70vh] py-4 sm:py-6 md:py-8 justify-start bg-[#E5EBF8] overflow-hidden items-center">
+  <div className="flex justify-center w-full px-4 sm:px-6 md:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 w-full sm:w-[90%] md:w-[85%] lg:w-[80%] gap-6 sm:gap-10 md:gap-12 lg:gap-16 place-content-center">
+      <div className="font-bold rounded justify-between items-center capitalize text-primary text-base sm:text-lg">
+        <div className="flex items-start py-2 sm:py-3 md:py-4">
+          <div className="w-[40px] sm:w-[60px] md:w-[72px] md:mr-2 my-2 sm:my-3 md:my-4 border-t-2 border-primary">
+            {""}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-primary text-base sm:text-lg md:text-[20px] font-semibold">
+              DONATE
+            </h3>
+            <div className="my-2 sm:my-3 md:my-4 flex flex-col gap-4 sm:gap-6 md:gap-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-[2rem] sm:leading-[2.5rem] md:leading-[3rem] lg:leading-[3.5rem]">
+                JOIN OUR CIRCLE OF HOPE TO END MARGINALIZATION
+              </h2>
+              <p className="text-black lowercase text-sm sm:text-base">
+                <span className="text-black uppercase">A</span>t Upright Kids Foundation, we believe that every child
+                deserves the opportunity to thrive. <span className="text-black uppercase">T</span>ogether, we can break
+                the cycle of poverty, end marginalization, and build
+                brighter futures for vulnerable children and families in
+                the Democratic Republic of Congo. <span className="text-black uppercase">B</span>y donating to Upright
+                Kids Foundation, you're joining a global community
+                committed to making a difference.
+              </p>
+              <div>
+                <Button onClick={() => {
+                  window.location.href = `/donation#donate`;
+                }} className="bg-primary hover:text-white text-white text-xs sm:text-sm md:text-base px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-2">
+                  Donate Now
+                </Button>
               </div>
             </div>
-            <div className="text-black p-4 flex flex-col gap-4 ">
+            </div>
+            </div>
+            </div>
+          <div className="text-black p-4 flex flex-col gap-4 ">
               <DonationCarousel />
             </div>
           </div>
