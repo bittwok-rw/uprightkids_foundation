@@ -159,8 +159,8 @@ const Contact = () => {
                   <h3 className="text-primary text-[20px] font-semibold">CONTACT US</h3>
                   <div className="my-4 flex flex-col gap-8">
                     <h2 className="text-5xl leading-[3.5rem]">GET IN TOUCH WITH UPRIGHT KIDS FOUNDATION</h2>
-                    <p className="text-black">
-                      We would love to hear from you! Whether you are interested in learning more about our programs, partnering with us, or exploring ways to support our mission. Please reach out to us with any questions via the following means:
+                    <p className="text-black lowercase">
+                    <span className="text-black uppercase">W</span>e would love to hear from you! Whether you are interested in learning more about our programs, partnering with us, or exploring ways to support our mission. <span className="text-black uppercase">P</span>lease reach out to us with any questions via the following means:
                     </p>
                   </div>
                 </div>

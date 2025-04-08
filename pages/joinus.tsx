@@ -265,8 +265,8 @@ const UprightKidsFoundation = () => {
                 </div>
 
                 <div className="my-4 text-white flex flex-col gap-8">
-                  <p className="text-white">
-                    Upright Kids Foundation is reaching out to the global community to support its important projects and help transform the lives of vulnerable children in the Democratic Republic of Congo. Together, we can make a real difference. Here are some ways you can get involved
+                  <p className="text-white lowercase">
+                    <span className="text-white  uppercase">U</span>pright Kids Foundation is reaching out to the global community to support its important projects and help transform the lives of vulnerable children in the Democratic Republic of Congo. <span className="text-white  uppercase">T</span>ogether, we can make a real difference. <span className="text-white  uppercase">H</span>ere are some ways you can get involved
                   </p>
                 </div>
                   <div>

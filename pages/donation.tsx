@@ -28,12 +28,12 @@ const Donation = () => {
                     <h2 className="text-5xl leading-[3.5rem]">
                       JOIN OUR CIRCLE OF HOPE TO END MARGINALIZATION
                     </h2>
-                    <p className="text-black">
-                      At Upright Kids Foundation, we believe that every child
-                      deserves the opportunity to thrive. Together, we can break
+                    <p className="text-black lowercase">
+                     <span className="text-black uppercase">A</span>t Upright Kids Foundation, we believe that every child
+                      deserves the opportunity to thrive. <span className="text-black uppercase">T</span>ogether, we can break
                       the cycle of poverty, end marginalization, and build
                       brighter futures for vulnerable children and families in
-                      the Democratic Republic of Congo. By donating to Upright
+                      the Democratic Republic of Congo. <span className="text-black uppercase">B</span>y donating to Upright
                       Kids Foundation, you’re joining a global community
                       committed to making a difference.
                     </p>
