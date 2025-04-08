@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 const customStyles = {
@@ -110,18 +111,19 @@ const Contact = () => {
     }
   }, [messageSet]);
 
+  const [showThankYou, setShowThankYou] = useState(false);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
-      await axios.post(`/api/interest`, {
-        ...values,
-      });
+      await axios.post(`/api/interest`, { ...values });
       toast.success("Form data submitted successfully!");
       form.reset();
       setActiveButton(null);
-      openModal();
+      setShowThankYou(true); // show thank you message
+      setTimeout(() => setShowThankYou(false), 4000); // hide after 4s
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response && error.response.status === 400) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
         toast.error(error.response.data);
       } else {
         toast.error("An unexpected error occurred");
@@ -130,6 +132,8 @@ const Contact = () => {
       setLoading(false);
     }
   };
+  
+  
 
   const handlePreFillMessage = (message: string, buttonType: string) => {
     form.setValue("message", message);
@@ -300,6 +304,22 @@ const Contact = () => {
                   <Button onClick={form.handleSubmit(onSubmit)} disabled={loading} className="mr-2 bg-accent text-black">
                     {loading ? "Submitting..." : "Send your inquiry"} <ArrowRight size={20} />
                   </Button>
+
+                  <AnimatePresence>
+                   {showThankYou && (
+                   <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   exit={{ opacity: 0, y: -10 }}
+                   transition={{ duration: 0.4 }}
+                   className="mt-4 text-green-600 font-semibold"
+                   >
+                  🎉 Thank you for your inquiry!
+                 </motion.div>
+                  )}
+                 </AnimatePresence>
+
+
                 </div>
               </div>
             </Form>
