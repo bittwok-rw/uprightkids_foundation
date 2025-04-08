@@ -34,7 +34,7 @@ const Donation = () => {
                 the cycle of poverty, end marginalization, and build
                 brighter futures for vulnerable children and families in
                 the Democratic Republic of Congo. <span className="text-black uppercase">B</span>y donating to Upright
-                Kids Foundation, you're joining a global community
+                Kids Foundation, you&apos;re joining a global community
                 committed to making a difference.
               </p>
               <div>
