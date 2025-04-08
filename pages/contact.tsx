@@ -64,15 +64,14 @@ const Contact = () => {
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [modalIsOpen, setIsOpen] = useState(false);
-  //const [modalIsOpenPayment, setIsOpenPayment] = useState(false);
   const [modalIsOpenDonate, setIsOpenDonate] = useState(false);
   const [mediaData, setMediaData] = useState<MediaItem[]>([]);
+  const [activeButton, setActiveButton] = useState<string | null>(null);
+  const [messageSet, setMessageSet] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const closeModalDonate = () => setIsOpenDonate(false);
-  //const openModalPayment = () => setIsOpenPayment(true);
-  //const closeModalPayment = () => setIsOpenPayment(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,6 +94,22 @@ const Contact = () => {
       });
   }, []);
 
+  // Automatically scroll to message field when a prefilled option is selected
+  useEffect(() => {
+    if (messageSet) {
+      const messageField = document.getElementById('message-field');
+      if (messageField) {
+        messageField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Highlight the message field briefly
+        messageField.classList.add('highlight-animation');
+        setTimeout(() => {
+          messageField.classList.remove('highlight-animation');
+          setMessageSet(false);
+        }, 2000);
+      }
+    }
+  }, [messageSet]);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
@@ -103,6 +118,7 @@ const Contact = () => {
       });
       toast.success("Form data submitted successfully!");
       form.reset();
+      setActiveButton(null);
       openModal();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response && error.response.status === 400) {
@@ -115,9 +131,14 @@ const Contact = () => {
     }
   };
 
-  const handlePreFillMessage = (message: string) => {
+  const handlePreFillMessage = (message: string, buttonType: string) => {
     form.setValue("message", message);
-    //openModalPayment();
+    setActiveButton(buttonType);
+    setMessageSet(true);
+    toast.success(`Your message has been set to "${buttonType}" template!`, {
+      duration: 2000,
+      position: 'bottom-center',
+    });
   };
 
   const displayedMedia = showAll ? mediaData : mediaData.slice(0, 4);
@@ -186,27 +207,39 @@ const Contact = () => {
                 <p className="text-white font-bold">Donate Today</p>
                 <ArrowRight />
               </div>
-              <div onClick={() => handlePreFillMessage("I would love to partner with Upright Kids Foundation.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
-             <p className="text-white font-bold">Partner with us</p>
-             <ArrowRight />
-             </div>
+              
+              {/* Interactive buttons with active state styling */}
+              <div 
+                onClick={() => handlePreFillMessage("I would love to partner with Upright Kids Foundation.", "Partner")} 
+                className={`${activeButton === "Partner" ? 'bg-accent text-black' : 'bg-[#0E2D58]'} cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center transition-all duration-300`}
+              >
+                <p className={`${activeButton === "Partner" ? 'text-black' : 'text-white'} font-bold`}>Partner with us</p>
+                <ArrowRight color={activeButton === "Partner" ? "#000" : "#fff"} />
+              </div>
 
-              <div onClick={() => handlePreFillMessage("I want to become a volunteer for Upright Kids Foundation.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
-              <p className="text-white font-bold">Become Volunteer</p>
-             <ArrowRight />
-             </div>
+              <div 
+                onClick={() => handlePreFillMessage("I want to become a volunteer for Upright Kids Foundation.", "Volunteer")} 
+                className={`${activeButton === "Volunteer" ? 'bg-accent text-black' : 'bg-[#0E2D58]'} cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center transition-all duration-300`}
+              >
+                <p className={`${activeButton === "Volunteer" ? 'text-black' : 'text-white'} font-bold`}>Become Volunteer</p>
+                <ArrowRight color={activeButton === "Volunteer" ? "#000" : "#fff"} />
+              </div>
 
-              <div onClick={() => handlePreFillMessage("I want to advocate for Upright Kids Foundation's mission.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
-              <p className="text-white font-bold">Advocate</p>
-              <ArrowRight />
-               </div>
+              <div 
+                onClick={() => handlePreFillMessage("I want to advocate for Upright Kids Foundation's mission.", "Advocate")} 
+                className={`${activeButton === "Advocate" ? 'bg-accent text-black' : 'bg-[#0E2D58]'} cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center transition-all duration-300`}
+              >
+                <p className={`${activeButton === "Advocate" ? 'text-black' : 'text-white'} font-bold`}>Advocate</p>
+                <ArrowRight color={activeButton === "Advocate" ? "#000" : "#fff"} />
+              </div>
 
-               <div onClick={() => handlePreFillMessage("I want to fundraise for Upright Kids Foundation.")} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
-               <p className="text-white font-bold">Fundraise with us</p>
-                <ArrowRight />
-               </div>
-
-
+              <div 
+                onClick={() => handlePreFillMessage("I want to fundraise for Upright Kids Foundation.", "Fundraise")} 
+                className={`${activeButton === "Fundraise" ? 'bg-accent text-black' : 'bg-[#0E2D58]'} cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center transition-all duration-300`}
+              >
+                <p className={`${activeButton === "Fundraise" ? 'text-black' : 'text-white'} font-bold`}>Fundraise with us</p>
+                <ArrowRight color={activeButton === "Fundraise" ? "#000" : "#fff"} />
+              </div>
             </div>
           </div>
           <div className="p-6 bg-[#0E2D58]">
@@ -246,8 +279,19 @@ const Contact = () => {
                     <FormItem>
                       <FormLabel className="w-full">Messages <span className="text-accent">*</span></FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Your Message" {...field} rows={5} className="p-4 rounded-md bg-white text-black placeholder:text-black/80 border border-secondary/20" />
+                        <Textarea 
+                          id="message-field"
+                          placeholder="Your Message" 
+                          {...field} 
+                          rows={5} 
+                          className={`p-4 rounded-md bg-white text-black placeholder:text-black/80 border border-secondary/20 ${activeButton ? 'border-accent border-2' : ''}`} 
+                        />
                       </FormControl>
+                      {activeButton && (
+                        <div className="text-accent text-sm mt-1">
+                          Message pre-filled with &ldquo;{activeButton}&rdquo; template. Feel free to edit.
+                        </div>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -302,7 +346,17 @@ const Contact = () => {
         </>
       </Modal>
 
-
+      <style jsx global>{`
+        .highlight-animation {
+          animation: highlight 2s ease-out;
+        }
+        
+        @keyframes highlight {
+          0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+          70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+      `}</style>
     </div>
   );
 };
