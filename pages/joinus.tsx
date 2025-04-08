@@ -271,7 +271,7 @@ const UprightKidsFoundation = () => {
                 </div>
                   <div>
                     <Link
-                      href="/joinus#partner"
+                      href="/contact"
                       className="px-8 py-4 bg-primary text-lg text-white rounded-md hover:bg-yellow-500 font-semibold stroke-tertiary-900 transition-colors duration-300"
                     >
                       Get involved
