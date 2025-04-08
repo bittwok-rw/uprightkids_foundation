@@ -149,24 +149,30 @@ const Contact = () => {
 
   return (
     <div>
-      <div className="w-full flex min-h-[60vh] py-8 justify-start bg-[#E5EBF8] overflow-hidden items-center">
-        <div className="flex justify-center">
-          <div className="grid md:grid-cols-2 w-[80%] gap-16 place-content-center">
-            <div className="font-bold rounded justify-between items-center capitalize text-primary text-lg">
-              <div className="flex items-start py-4">
-                <div className="w-[72px] md:mr-2 my-4 border-t-2 border-primary"></div>
-                <div>
-                  <h3 className="text-primary text-[20px] font-semibold">CONTACT US</h3>
-                  <div className="my-4 flex flex-col gap-8">
-                    <h2 className="text-5xl leading-[3.5rem]">GET IN TOUCH WITH UPRIGHT KIDS FOUNDATION</h2>
-                    <p className="text-black lowercase">
-                    <span className="text-black uppercase">W</span>e would love to hear from you! Whether you are interested in learning more about our programs, partnering with us, or exploring ways to support our mission. <span className="text-black uppercase">P</span>lease reach out to us with any questions via the following means:
-                    </p>
-                  </div>
-                </div>
-              </div>
+    <div className="w-full flex min-h-[60vh] sm:min-h-[65vh] md:min-h-[70vh] py-4 sm:py-6 md:py-8 justify-start bg-[#E5EBF8] overflow-hidden items-center">
+  <div className="flex justify-center w-full px-4 sm:px-6 md:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 w-full sm:w-[90%] md:w-[85%] lg:w-[80%] gap-6 sm:gap-10 md:gap-12 lg:gap-16 place-content-center">
+      <div className="font-bold rounded justify-between items-center capitalize text-primary text-base sm:text-lg">
+        <div className="flex items-start py-2 sm:py-3 md:py-4">
+          <div className="w-[40px] sm:w-[60px] md:w-[72px] md:mr-2 my-2 sm:my-3 md:my-4 border-t-2 border-primary">
+            {""}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-primary text-base sm:text-lg md:text-[20px] font-semibold">
+              CONTACT US
+            </h3>
+            <div className="my-2 sm:my-3 md:my-4 flex flex-col gap-4 sm:gap-6 md:gap-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-[2rem] sm:leading-[2.5rem] md:leading-[3rem] lg:leading-[3.5rem]">
+                GET IN TOUCH WITH UPRIGHT KIDS FOUNDATION
+              </h2>
+              <p className="text-black lowercase text-sm sm:text-base">
+                <span className="text-black uppercase">W</span>e would love to hear from you! Whether you are interested in learning more about our programs, partnering with us, or exploring ways to support our mission. <span className="text-black uppercase">P</span>lease reach out to us with any questions via the following means:
+              </p>
             </div>
-            <div className="text-black p-4 flex flex-col gap-8">
+            </div>
+            </div>
+            </div>
+          <div className="text-black p-4 flex flex-col gap-8">
               <div className="flex flex-col gap-4">
                 <p className="font-bold text-2xl">Contact</p>
                 <Link href={"mailto:info@uprightkidsfoundation.org"}>info@uprightkidsfoundation.org</Link>
