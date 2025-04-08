@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const FundamentalValuesCarousel = () => {
   return (
@@ -35,7 +36,7 @@ const FundamentalValuesCarousel = () => {
                 prevEl: ".custom-swiper-button-prev",
               }}
               modules={[Navigation]}
-              className="fundamental-values-carousel w-full pointer-events-none"
+              className="fundamental-values-carousel w-full"
             >
               {fundamentalValues.map((value, index) => {
                 const borderColors = [
@@ -58,9 +59,11 @@ const FundamentalValuesCarousel = () => {
                         </p>
                       </div>
                       <div>
-                        <Button className="text-white px-4 py-2 rounded hover:bg-purple-700">
-                          {value.buttonText}
-                        </Button>
+                        <Link href="/donation" passHref>
+                          <Button className="text-white px-4 py-2 rounded hover:bg-purple-700">
+                            {value.buttonText}
+                          </Button>
+                        </Link>
                       </div>
                     </div>
                   </SwiperSlide>
@@ -83,7 +86,6 @@ const FundamentalValuesCarousel = () => {
             <ChevronRight />
           </button>
         </div>
- 
       </div>
     </div>
   );
