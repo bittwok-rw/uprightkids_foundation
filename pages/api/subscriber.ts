@@ -34,18 +34,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Insert the email into the database
       await collection.insertOne({ email });
 
-      // Set up nodemailer to send a confirmation email
+      // Set up nodemailer with custom SMTP configuration
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: process.env.SMTP_HOST || "smtp.privateemail.com",
+        port: parseInt(process.env.SMTP_PORT || "587"),
+        secure: false, // true for 465, false for other ports
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: process.env.SMTP_USER || "info@uprightkidsfoundation.org",
+          pass: process.env.SMTP_PASS || "Up@right.25",
         },
       });
 
       // Send a thank-you email
       await transporter.sendMail({
-        from: `"Upright Kids Foundation" <${process.env.EMAIL_USER}>`,
+        from: `"Upright Kids Foundation" <${process.env.SMTP_USER || "info@uprightkidsfoundation.org"}>`,
         to: email,
         subject: "Thank You for Subscribing to Upright Kids Foundation!",
         text: `Dear Friend,\n\nThank you for subscribing to the Upright Kids Foundation newsletter! We're excited to share our latest updates, events, and stories of how we're helping children in need.\n\nYour support means the world to us and the children we serve.\n\nWith gratitude,\nThe Upright Kids Foundation Team`,

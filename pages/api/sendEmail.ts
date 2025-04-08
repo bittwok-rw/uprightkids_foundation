@@ -14,16 +14,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const transporter = nodemailer.createTransport({
-      service: "Gmail", // Use your preferred email provider
+      host: process.env.SMTP_HOST || "smtp.privateemail.com",
+      port: parseInt(process.env.SMTP_PORT || "587"),
+      secure: false, // true for 465, false for other ports
       auth: {
-        user: process.env.EMAIL_USER, // Add this to your .env file
-        pass: process.env.EMAIL_PASS, // Add this to your .env file
+        user: process.env.SMTP_USER || "info@uprightkidsfoundation.org",
+        pass: process.env.SMTP_PASS || "Up@right.25",
       },
     });
 
     await transporter.sendMail({
-      from: email,
-      to: "info@uprightkidsfoundation.org", // Replace with your recipient email
+      from: `"${names}" <${process.env.SMTP_USER || "info@uprightkidsfoundation.org"}>`,
+      replyTo: email,
+      to: "info@uprightkidsfoundation.org",
       subject: `New Contact Form Submission from ${names}`,
       text: `Name: ${names}\nEmail: ${email}\n\nMessage:\n${message}`,
     });
