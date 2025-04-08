@@ -7,10 +7,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "i.postimg.cc",
-        pathname: "/Dyzh3pFX/MG-6720.png",
+        pathname: "/**", // This allows all paths from i.postimg.cc
       },
     ],
   },
 };
 
 export default nextConfig;
+
