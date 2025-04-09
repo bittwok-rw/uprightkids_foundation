@@ -1,12 +1,10 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ContentSection from "@/components/content/ContentSection";
-
 
 export default function AboutSection() {
   const [showModal, setShowModal] = useState(false);
-  const [videoError, setVideoError] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && showModal) {
@@ -17,13 +15,13 @@ export default function AboutSection() {
     window.addEventListener("keydown", handleEscKey);
     return () => window.removeEventListener("keydown", handleEscKey);
   }, [showModal]);
+
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -64,15 +62,15 @@ export default function AboutSection() {
           type: "video",
           src: "/images/about/we-empower-children-out-of-poverty.png",
           showPlayIcon: true,
-          onPlayClick: handlePlayClick, 
+          onPlayClick: handlePlayClick, // make sure you pass this
         }}
       />
 
-      {/* Modal Video Player */}
+      {/* Modal with YouTube Embed */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-          <div className="relative w-full max-w-4xl max-h-full">
-            {/* Close button */}
+          <div className="relative w-full max-w-4xl aspect-video">
+            {/* Close Button */}
             <button
               onClick={() => setShowModal(false)}
               className="absolute -top-10 right-0 text-white hover:text-gray-300"
@@ -94,28 +92,15 @@ export default function AboutSection() {
               </svg>
             </button>
 
-            {/* Video Player */}
-            <div className="w-full overflow-hidden bg-black rounded-lg shadow-xl">
-              <video
-                ref={videoRef}
-                src="/video/INCLUSIVE CARE FOR CHILDREN WITH SPECIAL 2025-04-07.mp4"
-                className="w-full"
-                controls
-                autoPlay
-                onError={() => {
-                  console.error("Video failed to load");
-                  setVideoError(true);
-                }}
-              />
-              {videoError && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white p-4">
-                  <p>
-                    Sorry, there was an error loading the video. Please try
-                    again later.
-                  </p>
-                </div>
-              )}
-            </div>
+            {/* YouTube Iframe */}
+            <iframe
+              className="w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/ZydKTWQa8ds"
+              title="Upright Kids Foundation"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         </div>
       )}
