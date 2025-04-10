@@ -234,7 +234,13 @@ const DonateForm = ({ selectedAmount }: any) => {
           />
 
         <div className="flex items-center justify-center py-2">
-       <Image src="/images/paypallogo.jpeg" alt="PayPal" className="h-12 w-32" />
+        <Image
+  src="/images/paypallogo.jpeg"
+  alt="PayPal"
+  width={128} // pixels (matches w-32 = 8rem = 128px)
+  height={48} // pixels (matches h-12 = 3rem = 48px)
+/>
+
        </div>
 
 
