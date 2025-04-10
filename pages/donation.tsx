@@ -118,7 +118,7 @@ const Donation = () => {
             <h2>Choose How to Make an Impact</h2>
             <div className="relative h-[50vh] ">
               <Image
-                src="/images/blog/happy-people.png"
+                src="/images/child.png"
                 alt="Unlock digital potential"
                 className="w-full h-full object-cover rounded-md"
                 fill

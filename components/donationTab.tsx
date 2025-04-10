@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import DonateForm from "./DonateForm";
 
 export function DonationTabs() {
@@ -17,10 +18,24 @@ export function DonationTabs() {
   const [selectedAmount, setSelectedAmount] = useState<
     number | "custom" | null
   >(null);
-  // const [customAmount, setCustomAmount] = useState<number | "">(0);
+  const [customAmount, setCustomAmount] = useState<string>("");
 
   const handleAmountSelection = (amount: number | "custom") => {
     setSelectedAmount(amount);
+    if (amount !== "custom") {
+      setCustomAmount("");
+    }
+  };
+
+  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only allow numeric input
+    if (value === "" || /^\d+$/.test(value)) {
+      setCustomAmount(value);
+      if (value !== "") {
+        setSelectedAmount(parseInt(value, 10));
+      }
+    }
   };
 
   return (
@@ -64,7 +79,40 @@ export function DonationTabs() {
                     {selectedTab === "monthly" && "/month"}
                   </button>
                 ))}
+                <button
+                  className={`p-2 rounded-lg border ${
+                    selectedAmount === "custom" || 
+                    (selectedAmount && 
+                     ![20, 50, 100, 200, 500, 1000].includes(selectedAmount))
+                      ? "bg-accent text-black"
+                      : "bg-white text-black"
+                  }`}
+                  onClick={() => handleAmountSelection("custom")}
+                >
+                  Custom
+                </button>
               </div>
+              
+              {/* Custom amount input */}
+              {(selectedAmount === "custom" || 
+                (selectedAmount && 
+                 ![20, 50, 100, 200, 500, 1000].includes(selectedAmount))
+               ) && (
+                <div className="mt-4">
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <span className="text-gray-500">$</span>
+                    </div>
+                    <Input
+                      type="text"
+                      className="pl-8 bg-white text-black"
+                      placeholder="Enter amount"
+                      value={customAmount}
+                      onChange={handleCustomAmountChange}
+                    />
+                  </div>
+                </div>
+              )}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -82,13 +130,21 @@ export function DonationTabs() {
               <Button
                 onClick={() => setShowForm(true)}
                 className="w-full rounded-full bg-accent hover:bg-accent/90 hover:text-white text-black p-3"
-                disabled={!selectedAmount}
+                disabled={!selectedAmount || (selectedAmount === "custom" && !customAmount)}
               >
                 Donate Now
               </Button>
             )}
           </CardFooter>
-          {showForm && <DonateForm selectedAmount={selectedAmount} />}
+          {showForm && (
+            <DonateForm 
+              selectedAmount={
+                selectedAmount === "custom" 
+                  ? parseInt(customAmount, 10) 
+                  : selectedAmount
+              } 
+            />
+          )}
         </Card>
       </TabsContent>
     </Tabs>
