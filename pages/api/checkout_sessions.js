@@ -1,12 +1,13 @@
 import paypal from '@paypal/checkout-server-sdk';
 
-// Set up PayPal LIVE environment
+// Set up PayPal environment
 function environment() {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
   
-  // Always use LiveEnvironment in production code
-  return new paypal.core.LiveEnvironment(clientId, clientSecret);
+  return process.env.NODE_ENV === 'production'
+    ? new paypal.core.LiveEnvironment(clientId, clientSecret)
+    : new paypal.core.SandboxEnvironment(clientId, clientSecret);
 }
 
 // Create PayPal client
@@ -15,7 +16,7 @@ const client = new paypal.core.PayPalHttpClient(environment());
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     try {
-      // Create order request
+      // Create order request 
       const request = new paypal.orders.OrdersCreateRequest();
       request.prefer("return=representation");
       
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
       });
 
       // Call PayPal to create the order
-      const response = await client.execute(request);
+      const response = await client.execute(request);  
       
       // Find the approval URL
       const approvalUrl = response.result.links.find(link => link.rel === 'approve').href;

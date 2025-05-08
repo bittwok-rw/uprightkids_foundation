@@ -1,18 +1,23 @@
 import React from "react";
 
 const FAQSection = () => {
-  const [activeQuestion, setActiveQuestion] = React.useState<null | string>(null);
+  const [activeQuestion, setActiveQuestion] = React.useState<string | null>(null);
+  const [showAnswerOnMobile, setShowAnswerOnMobile] = React.useState(false);
 
   const faqs = [
     {
       question: "How can I partner with Upright Kids Foundation?",
       answer: `We welcome partnerships with individuals, organizations, and businesses that align with our mission. To partner with us, please reach out via email at 
-        <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold">info@uprightkidsfoundation.org</a>.`,
+        <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold text-[10px]">
+         info@uprightkidsfoundation.org
+         </a>.`,
     },
     {
       question: "How can I join as a volunteer?",
       answer: `Volunteering with Upright Kids Foundation is a rewarding way to make a difference. We offer both on-the-ground and remote volunteering opportunities. Whether you have skills in education, healthcare, fundraising, or administration, we'd love to have you on board. To apply, please send your resume and a brief statement of interest to 
-        <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold">info@uprightkidsfoundation.org</a>. Our team will review your application and match you with a role that aligns with your skills and our needs.`,
+        <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold text-[10px]">
+         info@uprightkidsfoundation.org</a>
+         . Our team will review your application and match you with a role that aligns with your skills and our needs.`,
     },
     {
       question: "Can I make a donation to a specific project?",
@@ -33,7 +38,10 @@ const FAQSection = () => {
     {
       question: "Can I make in-kind donations, such as stock or goods?",
       answer: `Yes, we gratefully accept in-kind donations, including stock, equipment, supplies, or other goods that support our programs. To discuss in-kind contributions, please email 
-        <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold">info@uprightkidsfoundation.org</a>.`,
+        <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold text-[10px]">
+         info@uprightkidsfoundation.org
+         </a>
+        .`,
     },
     {
       question: "What other ways can I give to support Upright Kids Foundation?",
@@ -61,17 +69,31 @@ const FAQSection = () => {
     {
       question: "Who can I contact for more information?",
       answer: `For any additional questions or support, please contact us at:<br/>
-        ◦ <strong>Email:</strong> <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold">info@uprightkidsfoundation.org</a><br/>
+        ◦ <strong>Email:</strong> <a href="mailto:info@uprightkidsfoundation.org" class="text-primary font-bold text-[10px]">
+         info@uprightkidsfoundation.org
+         </a><br/>
         ◦ <strong>Phone:</strong> +243 991170888`,
     },
   ];
+
+  const handleQuestionClick = (question: string) => {
+    setActiveQuestion(question);
+    // On mobile, show the answer view when a question is clicked
+    if (window.innerWidth < 768) {
+      setShowAnswerOnMobile(true);
+    }
+  };
+
+  const handleBackClick = () => {
+    setShowAnswerOnMobile(false);
+  };
 
   return (
     <div className="bg-white py-10 px-4 md:px-8 border border-blue-200">
       <div className="max-w-7xl p-8 mx-auto border shadow-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Questions Column */}
-          <div className="h-[600px] overflow-y-auto pr-4"> {/* Added height and scroll */}
+          {/* Questions Column - Hidden on mobile when showing answer */}
+          <div className={`h-64 md:h-96 overflow-y-auto pr-4 ${showAnswerOnMobile ? 'hidden md:block' : 'block'}`}>
             <h2 className="text-4xl font-bold text-primary mb-6">Frequently Asked Questions (FAQs)</h2>
             <div className="space-y-2">
               {faqs.map((faq, index) => (
@@ -82,9 +104,7 @@ const FAQSection = () => {
                       ? "bg-black text-white"
                       : "bg-gray-100 text-black hover:bg-gray-200"
                   }`}
-                  onClick={() =>
-                    setActiveQuestion(activeQuestion === faq.question ? null : faq.question)
-                  }
+                  onClick={() => handleQuestionClick(faq.question)}
                 >
                   {faq.question}
                   {activeQuestion === faq.question && (
@@ -95,16 +115,27 @@ const FAQSection = () => {
             </div>
           </div>
 
-          {/* Answer Column */}
-          <div className="h-[600px] overflow-y-auto"> {/* Added height and scroll */}
-            <h2 className="text-4xl font-bold text-primary mb-6">Answer</h2>
+          {/* Answer Column - Full width on mobile when showing answer */}
+          <div className={`h-64 md:h-96 overflow-y-auto ${showAnswerOnMobile ? 'block' : 'hidden md:block'}`}>
+            <div className="flex items-center mb-6">
+              {showAnswerOnMobile && (
+                <button 
+                  onClick={handleBackClick} 
+                  className="mr-3 bg-gray-400 p-2 rounded-full md:hidden"
+                >
+                  ← Back
+                </button>
+              )}
+              <h2 className="text-4xl font-bold text-primary">Answer</h2>
+            </div>
+            
             {activeQuestion ? (
-              <div className="bg-accent p-6 text-black flex gap-2">
+              <div className="bg-accent p-6 text-black flex gap-2 rounded-lg min-h-[200px]">
                 <div className="mb-2">★</div>
-                <p
+                <div
+                  className="w-full"
                   dangerouslySetInnerHTML={{
-                    __html:
-                      faqs.find((faq) => faq.question === activeQuestion)?.answer || "",
+                    __html: faqs.find((faq) => faq.question === activeQuestion)?.answer || "",
                   }}
                 />
               </div>

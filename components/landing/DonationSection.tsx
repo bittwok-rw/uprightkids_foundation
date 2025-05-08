@@ -28,7 +28,7 @@ export default function DonationSection() {
         <div className="text-center">
         </div>
   <h3 className="text-sm font-bold uppercase text-gray-700 mb-6">SUPPORT OUR WORK</h3>
-  <h2 className="text-xl lg:text-2xl font-extrabold uppercase leading-tight text-gray-900 text-left max-w-xs mx-auto">
+  <h2 className="text-xl lg:text-2xl font-bold uppercase leading-tight text-gray-900 text-left max-w-xs mx-auto">
   Join our circle of <br />
   hope to end <br />
   marginalization in <br />

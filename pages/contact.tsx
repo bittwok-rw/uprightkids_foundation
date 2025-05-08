@@ -209,10 +209,16 @@ const Contact = () => {
                 <p className="text-white font-bold">Frequently Asked Questions</p>
                 <ArrowRight />
               </div>
-              <div className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
-                <p className="text-white font-bold">Message us on Instagram</p>
-                <ArrowRight />
-              </div>
+              <a
+             href="https://www.instagram.com/upright_kids_foundation/"
+            target="_blank"
+            rel="noopener noreferrer"
+>
+            <div className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center items-center transition-transform duration-200">
+            <p className="text-white font-bold">Message us on Instagram</p>
+           <ArrowRight />
+           </div>
+           </a>
               <div onClick={() => { window.location.href = `/donation#donate`; }} className="bg-[#0E2D58] cursor-pointer hover:scale-110 p-4 gap-4 flex justify-center">
                 <p className="text-white font-bold">Donate Today</p>
                 <ArrowRight />

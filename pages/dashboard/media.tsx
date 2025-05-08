@@ -3,7 +3,7 @@ import axios from "axios";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { FaEllipsisV, FaTrash, FaEdit, FaPlus, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaEllipsisV, FaTrash, FaEdit, FaPlus } from "react-icons/fa";
 import dynamic from 'next/dynamic';
 
 // Define the proper type for media posts
@@ -36,6 +36,8 @@ const UploadBlog = () => {
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(true);
   const [expandedRows, setExpandedRows] = useState<{[key: string]: boolean}>({});
+  const [editMode, setEditMode] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState<string | null>(null);
 
   // Quill editor modules and formats
   const modules = {
@@ -96,14 +98,21 @@ const UploadBlog = () => {
     setIsLoading(true);
 
     try {
-      await axios.post("https://backenduprightkid.vercel.app/api/media", form);
-      alert("Media post uploaded successfully!");
+      if (editMode && currentEditId) {
+        await axios.put(`https://backenduprightkid.vercel.app/api/media/${currentEditId}`, form);
+        alert("Media post updated successfully!");
+      } else {
+        await axios.post("https://backenduprightkid.vercel.app/api/media", form);
+        alert("Media post uploaded successfully!");
+      }
       setForm({ title: "", slug: "", date: "", image: "", description: "" });
+      setEditMode(false);
+      setCurrentEditId(null);
       fetchMediaPosts();
       setShowForm(false); // Hide form after successful submission
     } catch (error) {
-      console.error("Error uploading media post:", error);
-      alert("Error uploading media post. Check console for details.");
+      console.error("Error uploading/updating media post:", error);
+      alert("Error uploading/updating media post. Check console for details.");
     } finally {
       setIsLoading(false);
     }
@@ -120,14 +129,6 @@ const UploadBlog = () => {
       console.error("Error deleting post:", error);
       alert("Failed to delete post.");
     }
-  };
-
-  // Toggle description expansion
-  const toggleDescription = (id: string) => {
-    setExpandedRows(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
   };
 
   // Format date for display
@@ -240,7 +241,7 @@ const UploadBlog = () => {
                   disabled={isLoading} 
                   className="w-full bg-indigo-600 hover:bg-indigo-700 py-3 rounded-lg shadow-md transition-transform transform hover:scale-105"
                 >
-                  {isLoading ? "Uploading..." : "Upload Media Post"}
+                  {isLoading ? (editMode ? "Updating..." : "Uploading...") : (editMode ? "Update Media Post" : "Upload Media Post")}
                 </Button>
               </form>
             </CardContent>
@@ -291,18 +292,24 @@ const UploadBlog = () => {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="flex items-center">
-                          <div 
-                            className={`prose prose-sm max-w-none overflow-hidden ${expandedRows[post._id] ? "" : "line-clamp-2 max-h-12"}`}
-                            dangerouslySetInnerHTML={createMarkup(post.description)}
-                          />
+                        {expandedRows[post._id] ? (
+                          <div>
+                            <div className="prose prose-sm max-w-none mb-2" dangerouslySetInnerHTML={createMarkup(post.description)} />
+                            <button
+                              onClick={() => setExpandedRows({})}
+                              className="text-indigo-600 hover:text-indigo-800 underline text-sm"
+                            >
+                              Hide Description
+                            </button>
+                          </div>
+                        ) : (
                           <button
-                            onClick={() => toggleDescription(post._id)}
-                            className="ml-2 text-indigo-600 hover:text-indigo-800 flex-shrink-0"
+                            onClick={() => setExpandedRows({ [post._id]: true })}
+                            className="text-indigo-600 hover:text-indigo-800 underline text-sm"
                           >
-                            {expandedRows[post._id] ? <FaChevronUp size={16} /> : <FaChevronDown size={16} />}
+                            View Description
                           </button>
-                        </div>
+                        )}
                       </td>
                       <td className="p-4 relative text-center">
                         <button
@@ -317,7 +324,7 @@ const UploadBlog = () => {
                           <div className="absolute right-4 top-12 bg-white shadow-xl rounded-lg p-2 space-y-1 z-10 border border-gray-200 min-w-40">
                             <button
                               className="flex items-center gap-2 p-2 text-indigo-600 hover:bg-indigo-50 w-full rounded-md transition-colors"
-                              onClick={() => alert("Edit feature coming soon!")}
+                              onClick={() => alert("Wait, it's coming soon!")}
                             >
                               <FaEdit /> Edit
                             </button>
